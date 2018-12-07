@@ -3,6 +3,13 @@ body, html {
   padding: 10px;
   height: 100%;
 }
+h1 {
+  text-align: center;
+}
+
+table {
+  margin: 0 auto;
+}
 
 input {
   padding: 0 5px;
@@ -29,9 +36,9 @@ th:nth-child(odd),td:nth-child(odd) {
 th:nth-child(even),td:nth-child(even) {
   background-color: #ffbbbb;
 }
-
-table {
-  margin-top: 30px;
+tr:nth-child(1) td {
+  background-color: white;
+  padding-bottom: 20px;
 }
 
 #play {
@@ -52,7 +59,7 @@ table {
   float: right;
 }
 
-a {
+a.btn {
   text-decoration: none;
   -moz-border-radius: 30px;
   -webkit-border-radius: 30px;
@@ -65,11 +72,11 @@ a {
   position: relative;
   display: inline-block;
 }
-a span {
+a.btn span {
   position: relative;
   z-index: 3;
 }
-a .round {
+a.btn .round {
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
@@ -81,7 +88,7 @@ a .round {
   font-soze: 42px;
   z-index: 2;
 }
-a .round span {
+a.btn .round span {
   position: absolute;
   margin-top: -9px;
   margin-left: 6px;
@@ -91,4 +98,8 @@ a .round span {
 .txt {
   font-size: 14px;
   line-height: 1.45;
+}
+
+.footer {
+  text-align: center;
 }
