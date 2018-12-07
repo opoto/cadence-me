@@ -90,15 +90,15 @@ a.btn .round {
   position: absolute;
   right: 3px;
   top: 3px;
-  font-size:24px;
+  font-size:20px;
   z-index: 2;
 }
 a.btn .round i {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-top: -12px;
-  margin-left: -10px;
+  margin-top: -10px;
+  margin-left: -8px;
 }
 
 a.btn span.txt {
