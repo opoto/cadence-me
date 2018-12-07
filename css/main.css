@@ -12,16 +12,16 @@ table {
 }
 
 input {
-  padding: 0 5px;
+  padding: 0 2px;
 }
 input.tempo {
   width: 30px;
 }
 input.lenmin, input.lensec, input.pausemin, input.pausesec {
-  width: 25px;
+  width: 20px;
 }
 input.repeat {
-  width: 25px;
+  width: 20px;
 }
 td input, td, th {
   font-size: 18px;
@@ -31,10 +31,10 @@ th, td {
   padding-left: 5px;
 }
 th:nth-child(odd),td:nth-child(odd) {
-  background-color: #b293bf;
+  background-color: #9494b8;
 }
 th:nth-child(even),td:nth-child(even) {
-  background-color: #ffbbbb;
+  background-color: #d1d1e0;
 }
 tr:nth-child(1) td {
   background-color: white;
@@ -53,9 +53,14 @@ tr:nth-child(1) td {
 #stop .round {
   background-color: #ff4d4d;
 }
+#clear {
+  background-color: #5A5B5E;
+}
+#clear .round {
+  background-color: #737478;
+}
 
 #clear {
-  padding: 10px;
   float: right;
 }
 
@@ -85,17 +90,18 @@ a.btn .round {
   position: absolute;
   right: 3px;
   top: 3px;
-  font-soze: 42px;
+  font-size:24px;
   z-index: 2;
 }
-a.btn .round span {
+a.btn .round i {
   position: absolute;
-  margin-top: -9px;
-  margin-left: 6px;
-  font-size: 42px;
+  top: 50%;
+  left: 50%;
+  margin-top: -12px;
+  margin-left: -10px;
 }
 
-.txt {
+a.btn span.txt {
   font-size: 14px;
   line-height: 1.45;
 }

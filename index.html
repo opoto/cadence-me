@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>Cadence Me!</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/regular.css" integrity="sha384-z3ccjLyn+akM2DtvRQCXJwvT5bGZsspS4uptQKNXNg778nyzvdMqiGcqHVGiAUyY" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/fontawesome.css" integrity="sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
@@ -14,22 +16,25 @@
         <td colspan="2">
           <a id="play" class="btn">
             <span class="txt">Play</span>
-            <span class="round"><span>&#9654;</span></span>
+            <span class="round"><i class="far fa-play-circle"></i></span>
           </a>
           <a id="stop" class="btn">
             <span class="txt">Stop</span>
-            <span class="round"><span>&#9632;</span></span>
+            <span class="round"><i class="far fa-stop-circle"></i></span>
           </a>
         </td>
         <td colspan="2">
-          <button id="clear">Clear</button>
+          <a id="clear" class="btn">
+            <span class="txt">Clear</span>
+            <span class="round"><i class="far fa-trash-alt"></i></span>
+          </a>
         </td>
       </tr>
       <tr>
-        <th>Tempo</th>
-        <th>Duration</th>
+        <th>BPM</th>
+        <th>Time</th>
         <th>Pause</th>
-        <th>Repeat</th>
+        <th>Loops</th>
       </tr>
       <tr>
         <td><input class='tempo' type='text' value="1"></td>
