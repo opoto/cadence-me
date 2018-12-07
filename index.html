@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width user-scalable=no">
+    <title>Cadence Me!</title>
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <h1>Cadence Me!</h1>
+    <div>
+      <a id="play">
+        <span class="txt">Play</span>
+        <span class="round"><span>&#9654;</span></span>
+      </a>
+      <a id="stop">
+        <span class="txt">Stop</span>
+        <span class="round"><span>&#9632;</span></span>
+      </a>
+      <button id="clear">Clear</button>
+    </div>
+    <table>
+      <tr>
+        <th>Tempo</th>
+        <th>Duration</th>
+        <th>Pause</th>
+        <th>Repeat</th>
+      </tr>
+      <tr>
+        <td><input class='tempo' type='text' value="1"></td>
+        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="1">"</td>
+        <td><input class='pausemin' type='text' value="5">'<input class='pausesec' type='text' value="">"</td>
+        <td><input class='repeat' type='text' value="1"></td>
+      </tr>
+      <tr>
+        <td><input class='tempo' type='text' value="170"></td>
+        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="30">"</td>
+        <td><input class='pausemin' type='text' value="1">'<input class='pausesec' type='text' value="">"</td>
+        <td><input class='repeat' type='text' value="3"></td>
+      </tr>
+      <tr>
+        <td><input class='tempo' type='text' value="180"></td>
+        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="60">"</td>
+        <td><input class='pausemin' type='text' value="1">'<input class='pausesec' type='text' value="">"</td>
+        <td><input class='repeat' type='text' value="1"></td>
+      </tr>
+      <tr>
+        <td><input class='tempo' type='text' value="170"></td>
+        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="15">"</td>
+        <td><input class='pausemin' type='text' value="2">'<input class='pausesec' type='text' value="">"</td>
+        <td><input class='repeat' type='text' value="5"></td>
+      </tr>
+      <tr>
+        <td><input class='tempo' type='text' value="170"></td>
+        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="10">"</td>
+        <td><input class='pausemin' type='text' value="3">'<input class='pausesec' type='text' value="">"</td>
+        <td><input class='repeat' type='text' value="20"></td>
+      </tr>
+      <tr>
+        <td><input class='tempo' type='text' value=""></td>
+        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="">"</td>
+        <td><input class='pausemin' type='text' value="">'<input class='pausesec' type='text' value="">"</td>
+        <td><input class='repeat' type='text' value=""></td>
+      </tr>
+      <tr>
+        <td><input class='tempo' type='text' value=""></td>
+        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="">"</td>
+        <td><input class='pausemin' type='text' value="">'<input class='pausesec' type='text' value="">"</td>
+        <td><input class='repeat' type='text' value=""></td>
+      </tr>
+      <tr>
+        <td><input class='tempo' type='text' value=""></td>
+        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="">"</td>
+        <td><input class='pausemin' type='text' value="">'<input class='pausesec' type='text' value="">"</td>
+        <td><input class='repeat' type='text' value=""></td>
+      </tr>
+      <tr>
+        <td><input class='tempo' type='text' value=""></td>
+        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="">"</td>
+        <td><input class='pausemin' type='text' value="">'<input class='pausesec' type='text' value="">"</td>
+        <td><input class='repeat' type='text' value=""></td>
+      </tr>
+      <tr>
+        <td><input class='tempo' type='text' value=""></td>
+        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="">"</td>
+        <td><input class='pausemin' type='text' value="">'<input class='pausesec' type='text' value="">"</td>
+        <td><input class='repeat' type='text' value=""></td>
+      </tr>
+    </table>
+    <script src="https://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
+    <script src="js/cadence-me.js"></script>
+   </body>
+</html>
