@@ -242,7 +242,7 @@ function clearAllPatterns() {
 }
 
 function deletePattern(tr) {
-  if (confirm("Delete this row?")) {
+  if (confirm("Delete this pattern?")) {
     var i = parseInt(tr.getAttribute("patid"));
     patterns.splice(i, 1);
     tr.remove();
