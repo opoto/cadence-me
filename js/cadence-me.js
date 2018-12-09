@@ -164,12 +164,13 @@ function openInputs(tr) {
   inputTr = tr;
   var i = parseInt(tr.getAttribute("patid"));
   get("#input-tempo").value = patterns[i].tempo;
-  get("#input-lenmin").value = Math.round(patterns[i].len/60);
+  get("#input-lenmin").value = Math.floor(patterns[i].len/60);
   get("#input-lensec").value = (patterns[i].len%60);
-  get("#input-pausemin").value = Math.round(patterns[i].pause/60);
+  get("#input-pausemin").value = Math.floor(patterns[i].pause/60);
   get("#input-pausesec").value = (patterns[i].pause%60);
   get("#input-repeat").value = patterns[i].repeat;
   get("#input-box").style.display = "block";
+  get("#input-tempo").select();
   okFunc = validateInputs;
   cancelFunc = closeInputsBox;
 }
@@ -268,8 +269,8 @@ function addPatternRow(table, i) {
 
 function setPatternRow(tr, tempo, len, pause, repeat) {
   tr.querySelector(".vtempo").innerText = tempo;
-  tr.querySelector(".vlen").innerText = Math.round(len / 60) + "'" + (len%60) + "\"";
-  tr.querySelector(".vpause").innerText = Math.round(pause / 60) + "'" + (pause%60) + "\"";
+  tr.querySelector(".vlen").innerText = Math.floor(len / 60) + "'" + (len%60) + "\"";
+  tr.querySelector(".vpause").innerText = Math.floor(pause / 60) + "'" + (pause%60) + "\"";
   tr.querySelector(".vrepeat").innerText = repeat;
 }
 
