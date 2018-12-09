@@ -12,9 +12,60 @@
   </head>
   <body>
     <h1>Cadence Me!</h1>
-    <table>
+
+    <!-- Number input -->
+    <div id="input-box" class="modal">
+      <div class="modal-content">
+        <table class="tinputs">
+          <tr>
+            <td>
+              Bips per minute:
+            </td>
+            <td>
+              <input id="input-tempo" type="number" min="0" max="250" value="180" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Bips duration:
+            </td>
+            <td>
+              <input id="input-lenmin" type="number" min="0" max="999" value="0" />min
+              <input id="input-lensec" type="number" min="0" max="90" value="30" />sec
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Pause bips:
+            </td>
+            <td>
+              <input id="input-pausemin" type="number" min="0" max="999" value="0" />min
+              <input id="input-pausesec" type="number" min="0" max="59" value="30" />sec
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Repeat:
+            </td>
+            <td>
+              <input id="input-repeat" type="number" min="1" max="999" value="1" />
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <button id="input-ok">OK</button>
+              <button id="input-cancel">Cancel</button>
+              <button id="input-clear">Clear</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+
+    <table class="tpatterns">
       <tr>
-        <td colspan="2">
+        <td colspan="3">
           <a id="play" class="btn">
             <span class="txt">Play</span>
             <span class="round"><i class="fa fa-play"></i></span>
@@ -24,7 +75,7 @@
             <span class="round"><i class="fa fa-stop"></i></span>
           </a>
         </td>
-        <td colspan="2">
+        <td colspan="3">
           <a id="clear" class="btn">
             <span class="txt">Clear</span>
             <span class="round"><i class="fa fa-ban"></i></span>
@@ -32,70 +83,12 @@
         </td>
       </tr>
       <tr>
+        <th></th>
         <th><i class="fa fa-check-double"></i></th>
         <th><i class="fa fa-volume-up"></i></th>
         <th><i class="fa fa-volume-mute"></i></th>
         <th><i class="fa fa-redo"></i></th>
-      </tr>
-      <tr>
-        <td><input class='tempo' type='text' value="1"></td>
-        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="1">"</td>
-        <td><input class='pausemin' type='text' value="5">'<input class='pausesec' type='text' value="">"</td>
-        <td><input class='repeat' type='text' value="1"></td>
-      </tr>
-      <tr>
-        <td><input class='tempo' type='text' value="170"></td>
-        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="30">"</td>
-        <td><input class='pausemin' type='text' value="1">'<input class='pausesec' type='text' value="">"</td>
-        <td><input class='repeat' type='text' value="3"></td>
-      </tr>
-      <tr>
-        <td><input class='tempo' type='text' value="180"></td>
-        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="60">"</td>
-        <td><input class='pausemin' type='text' value="1">'<input class='pausesec' type='text' value="">"</td>
-        <td><input class='repeat' type='text' value="1"></td>
-      </tr>
-      <tr>
-        <td><input class='tempo' type='text' value="170"></td>
-        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="15">"</td>
-        <td><input class='pausemin' type='text' value="2">'<input class='pausesec' type='text' value="">"</td>
-        <td><input class='repeat' type='text' value="5"></td>
-      </tr>
-      <tr>
-        <td><input class='tempo' type='text' value="170"></td>
-        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="10">"</td>
-        <td><input class='pausemin' type='text' value="3">'<input class='pausesec' type='text' value="">"</td>
-        <td><input class='repeat' type='text' value="20"></td>
-      </tr>
-      <tr>
-        <td><input class='tempo' type='text' value=""></td>
-        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="">"</td>
-        <td><input class='pausemin' type='text' value="">'<input class='pausesec' type='text' value="">"</td>
-        <td><input class='repeat' type='text' value=""></td>
-      </tr>
-      <tr>
-        <td><input class='tempo' type='text' value=""></td>
-        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="">"</td>
-        <td><input class='pausemin' type='text' value="">'<input class='pausesec' type='text' value="">"</td>
-        <td><input class='repeat' type='text' value=""></td>
-      </tr>
-      <tr>
-        <td><input class='tempo' type='text' value=""></td>
-        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="">"</td>
-        <td><input class='pausemin' type='text' value="">'<input class='pausesec' type='text' value="">"</td>
-        <td><input class='repeat' type='text' value=""></td>
-      </tr>
-      <tr>
-        <td><input class='tempo' type='text' value=""></td>
-        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="">"</td>
-        <td><input class='pausemin' type='text' value="">'<input class='pausesec' type='text' value="">"</td>
-        <td><input class='repeat' type='text' value=""></td>
-      </tr>
-      <tr>
-        <td><input class='tempo' type='text' value=""></td>
-        <td><input class='lenmin' type='text' value="">'<input class='lensec' type='text' value="">"</td>
-        <td><input class='pausemin' type='text' value="">'<input class='pausesec' type='text' value="">"</td>
-        <td><input class='repeat' type='text' value=""></td>
+        <th><i class="fa fa-plus" onclick='newPattern()'></i></th>
       </tr>
     </table>
     <script src="https://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
