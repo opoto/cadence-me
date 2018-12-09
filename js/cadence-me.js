@@ -281,7 +281,7 @@ function init() {
       var status = v && JSON && JSON.parse ? JSON.parse(v) : undefined;
       patterns = status.patterns;
     } catch (ex) {
-      error("Invalid status in storage");
+      console.error("Invalid status in storage");
       v = undefined;
     }
     if (!v) {
