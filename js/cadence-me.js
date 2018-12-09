@@ -116,8 +116,8 @@ function thisIsTheEnd() {
     timerWorker.postMessage("stop");
     if (pattimer) clearTimeout(pattimer);
     pattimer = undefined;
-    hide(get("#stop"));
-    show(get("#play"));
+    $("#stop").hide();
+    $("#play").show();
     console.log("done.");
 }
 
@@ -146,15 +146,13 @@ function letsGo() {
       patnum = 0;
       isPlaying = false;
       next();
-      show(get("#stop"));
-      hide(get("#play"));
+      $("#stop").show();
+      $("#play").hide();
     }
 }
 
 function clearInputs() {
-    forEach("table.tinputs input", function(elt, i) {
-      elt.value = "";
-    });
+    $("table.tinputs input").val("");
 }
 
 var inputTr;
@@ -162,46 +160,46 @@ var okFunc;
 var cancelFunc;
 function openInputs(tr) {
   inputTr = tr;
-  var i = parseInt(tr.getAttribute("patid"));
-  get("#input-tempo").value = patterns[i].tempo;
-  get("#input-lenmin").value = Math.floor(patterns[i].len/60);
-  get("#input-lensec").value = (patterns[i].len%60);
-  get("#input-pausemin").value = Math.floor(patterns[i].pause/60);
-  get("#input-pausesec").value = (patterns[i].pause%60);
-  get("#input-repeat").value = patterns[i].repeat;
-  get("#input-box").style.display = "block";
-  get("#input-tempo").select();
+  var i = parseInt(tr.attr("patid"));
+  $("#input-tempo").val(patterns[i].tempo);
+  $("#input-lenmin").val(Math.floor(patterns[i].len/60));
+  $("#input-lensec").val((patterns[i].len%60));
+  $("#input-pausemin").val(Math.floor(patterns[i].pause/60));
+  $("#input-pausesec").val((patterns[i].pause%60));
+  $("#input-repeat").val(patterns[i].repeat);
+  $("#input-box").css("display", "block");
+  $("#input-tempo").select();
   okFunc = validateInputs;
   cancelFunc = closeInputsBox;
 }
 
 function closeInputsBox() {
-  hide(get("#input-box"));
+  $("#input-box").hide();
 }
 
 function validateInputs() {
-  var i = parseInt(inputTr.getAttribute("patid"));
-  patterns[i].tempo = intInput(get("#input-tempo"));
-  patterns[i].len = (intInput(get("#input-lenmin")) * 60) + intInput(get("#input-lensec"));
-  patterns[i].pause = (intInput(get("#input-pausemin")) * 60) + intInput(get("#input-pausesec"));
-  patterns[i].repeat = intInput(get("#input-repeat"));
+  var i = parseInt(inputTr.attr("patid"));
+  patterns[i].tempo = intInput($("#input-tempo"));
+  patterns[i].len = (intInput($("#input-lenmin")) * 60) + intInput($("#input-lensec"));
+  patterns[i].pause = (intInput($("#input-pausemin")) * 60) + intInput($("#input-pausesec"));
+  patterns[i].repeat = intInput($("#input-repeat"));
   setPatternRow(inputTr, patterns[i].tempo, patterns[i].len, patterns[i].pause, patterns[i].repeat);
   closeInputsBox();
   saveStatus();
 }
 
 function closeExport() {
-  hide(get("#export-box"));
+  $("#export-box").hide();
 }
 function openExport() {
   if (supportsBase64() && JSON && JSON.stringify) {
-    get("#export-box").style.display = "block";
+    $("#export-box").css("display", "block");
     v = JSON.stringify({
       patterns: patterns
     });
     var data = b64EncodeUnicode(v);
-    var valelt = get("#export-val");
-    valelt.value = window.location.toString() + "?import=" + data;
+    var valelt = $("#export-val");
+    valelt.val(window.location.toString() + "?import=" + data);
     valelt.select();
 
     okFunc = closeExport;
@@ -213,13 +211,13 @@ function openExport() {
 
 function copyOnClick(event) {
   if (event.target && document.execCommand) {
-    var elt = get("#" + event.target.id.substring(1));
+    var elt = $("#" + event.target.id.substring(1));
     elt.select();
     document.execCommand("copy");
     var tmp = elt.value;
-    elt.value = "Text copied to clipboard";
+    elt.val("Text copied to clipboard");
     setTimeout(function(){
-      elt.value = tmp;
+      elt.val(tmp);
       elt.select();
      }, 2000);
   }
@@ -227,10 +225,7 @@ function copyOnClick(event) {
 
 
 function clearTable() {
-  forEach("table.tpatterns tr", function(elt, i) {
-    var patid = elt.getAttribute("patid");
-    if (patid != undefined) elt.remove();
-  });
+  $("table.tpatterns tr.pattern").remove();
 }
 
 function clearAllPatterns() {
@@ -243,7 +238,7 @@ function clearAllPatterns() {
 
 function deletePattern(tr) {
   if (confirm("Delete this pattern?")) {
-    var i = parseInt(tr.getAttribute("patid"));
+    var i = parseInt(tr.attr("patid"));
     patterns.splice(i, 1);
     tr.remove();
     saveStatus();
@@ -251,32 +246,33 @@ function deletePattern(tr) {
 }
 
 function addPatternRow(table, i) {
-  var tr=document.createElement("tr");
-  tr.setAttribute("patid", i);
+  var tr = $(document.createElement("tr"));
+  tr.attr("patid", i);
+  tr.attr("class", "pattern");
   var row = "";
   row += "<td><i class='fa fa-ellipsis-v'></i></td>";
   row += "<td class='vtempo'></td>";
   row += "<td class='vlen'></td>";
   row += "<td class='vpause'></td>";
   row += "<td class='vrepeat'></td>";
-  row += "<td><a onclick='openInputs(this.closest(\"tr\"))'><i class='fa fa-edit'></i></a>";
-  row += "    <a onclick='deletePattern(this.closest(\"tr\"))'><i class='fa fa-trash'></i></a></td>";
+  row += "<td><a onclick='openInputs($(this).parents(\"tr\"))'><i class='fa fa-edit'></i></a>";
+  row += "    <a onclick='deletePattern($(this).parents(\"tr\"))'><i class='fa fa-trash'></i></a></td>";
   row += "</tr>";
-  tr.innerHTML = row;
-  table.firstElementChild.appendChild(tr);
+  tr.html(row);
+  table.first().append(tr);
   return tr;
 }
 
 function setPatternRow(tr, tempo, len, pause, repeat) {
-  tr.querySelector(".vtempo").innerText = tempo;
-  tr.querySelector(".vlen").innerText = Math.floor(len / 60) + "'" + (len%60) + "\"";
-  tr.querySelector(".vpause").innerText = Math.floor(pause / 60) + "'" + (pause%60) + "\"";
-  tr.querySelector(".vrepeat").innerText = repeat;
+  tr.find(".vtempo").text(tempo);
+  tr.find(".vlen").text(Math.floor(len / 60) + "'" + (len%60) + "\"");
+  tr.find(".vpause").text(Math.floor(pause / 60) + "'" + (pause%60) + "\"");
+  tr.find(".vrepeat").text(repeat);
 }
 
 function newPattern() {
   addPattern(180, 10, 120, 2);
-  var table = get("table.tpatterns");
+  var table = $("table.tpatterns");
   var i = patterns.length - 1;
   var tr = addPatternRow(table, i);
   openInputs(tr);
@@ -284,7 +280,7 @@ function newPattern() {
 
 function initTable() {
   clearTable();
-  var table = get("table.tpatterns");
+  var table = $("table.tpatterns");
   for (var i=0; i < patterns.length; i++) {
     var tr = addPatternRow(table, i);
     setPatternRow(tr, patterns[i].tempo, patterns[i].len, patterns[i].pause, patterns[i].repeat);
@@ -293,30 +289,15 @@ function initTable() {
 
 // --------------------------- Utility methods --------------------------------
 
-function forEach(selector, func) {
-  var elements = getAll(selector);
-  Array.prototype.forEach.call(elements, func);
-}
-function get(id) {
-  return document.querySelector(id);
-}
-function getAll(id) {
-  return document.querySelectorAll(id);
-}
 function intInput(elt) {
     try {
-      var v = parseInt(elt.value.trim(), 10);
+      var v = parseInt(elt.val().trim(), 10);
       return v || 0;
     } catch(err) {
       return 0;
     }
 }
-function hide(elt) {
-  elt.style.display = "none";
-}
-function show(elt) {
-  elt.style.display = "";
-}
+
 function supportsBase64() {
   return btoa && atob ? true : false;
 }
@@ -367,25 +348,25 @@ function init() {
 
     initTable();
 
-    get("#play").onclick = letsGo;
-    get("#stop").onclick = thisIsTheEnd;
-    get("#clear").onclick = clearAllPatterns;
-    get("#share").onclick = openExport;
-    get("#input-ok").onclick = validateInputs;
-    get("#input-cancel").onclick = closeInputsBox;
-    get("#input-clear").onclick = clearInputs;
-    get("#export-close").onclick = closeExport;
-    get(".copyonclick").onclick = copyOnClick;
-    hide(get("#stop"));
-    show(get("#play"));
+    $("#play").click(letsGo);
+    $("#stop").click(thisIsTheEnd);
+    $("#clear").click(clearAllPatterns);
+    $("#share").click(openExport);
+    $("#input-ok").click(validateInputs);
+    $("#input-cancel").click(closeInputsBox);
+    $("#input-clear").click(clearInputs);
+    $("#export-close").click(closeExport);
+    $(".copyonclick").click(copyOnClick);
+    $("#stop").hide();
+    $("#play").show();
 
-    get("#email").onclick = function() {
+    $("#email").click(function() {
       function doEmail(d, i, tail) {
         location.href = "mailto:" + i + "@" + d + tail;
       }
       doEmail("gmail.com", "olivier.potonniee", "?subject=" + "cadence-me");
       return false;
-    }
+    });
 
 
     function promptKeyEvent(event) {
@@ -396,12 +377,8 @@ function init() {
       }
     }
 
-    forEach(".tinputs input", function(elt, i) {
-      elt.onkeyup = promptKeyEvent;
-    });
-    forEach("#export-box input", function(elt, i) {
-      elt.onkeyup = promptKeyEvent;
-    });
+    $(".tinputs input").keyup(promptKeyEvent);
+    $("#export-box input").keyup(promptKeyEvent);
 
     // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
     // Http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js
