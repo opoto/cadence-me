@@ -158,6 +158,8 @@ function clearInputs() {
 }
 
 var inputTr;
+var okFunc;
+var cancelFunc;
 function openInputs(tr) {
   inputTr = tr;
   var i = parseInt(tr.getAttribute("patid"));
@@ -168,9 +170,11 @@ function openInputs(tr) {
   get("#input-pausesec").value = (patterns[i].pause%60);
   get("#input-repeat").value = patterns[i].repeat;
   get("#input-box").style.display = "block";
+  okFunc = validateInputs;
+  cancelFunc = closeInputsBox;
 }
 
-function closeBox() {
+function closeInputsBox() {
   hide(get("#input-box"));
 }
 
@@ -181,38 +185,50 @@ function validateInputs() {
   patterns[i].pause = (intInput(get("#input-pausemin")) * 60) + intInput(get("#input-pausesec"));
   patterns[i].repeat = intInput(get("#input-repeat"));
   setPatternRow(inputTr, patterns[i].tempo, patterns[i].len, patterns[i].pause, patterns[i].repeat);
-  closeBox();
+  closeInputsBox();
   saveStatus();
 }
 
-function forEach(selector, func) {
-  var elements = getAll(selector);
-  Array.prototype.forEach.call(elements, func);
+function closeExport() {
+  hide(get("#export-box"));
 }
-function get(id) {
-  return document.querySelector(id);
+function openExport() {
+  if (supportsBase64() && JSON && JSON.stringify) {
+    get("#export-box").style.display = "block";
+    v = JSON.stringify({
+      patterns: patterns
+    });
+    var data = b64EncodeUnicode(v);
+    var valelt = get("#export-val");
+    valelt.value = window.location.toString() + "?import=" + data;
+    valelt.select();
+
+    okFunc = closeExport;
+    cancelFunc = closeExport;
+  } else {
+    alert("Your browser does not support this feature");
+  }
 }
-function getAll(id) {
-  return document.querySelectorAll(id);
+
+function copyOnClick(event) {
+  if (event.target && document.execCommand) {
+    var elt = get("#" + event.target.id.substring(1));
+    elt.select();
+    document.execCommand("copy");
+    var tmp = elt.value;
+    elt.value = "Text copied to clipboard";
+    setTimeout(function(){
+      elt.value = tmp;
+      elt.select();
+     }, 2000);
+  }
 }
-function intInput(elt) {
-    try {
-      var v = parseInt(elt.value.trim(), 10);
-      return v || 0;
-    } catch(err) {
-      return 0;
-    }
-}
-function hide(elt) {
-  elt.style.display = "none";
-}
-function show(elt) {
-  elt.style.display = "";
-}
+
 
 function clearTable() {
   forEach("table.tpatterns tr", function(elt, i) {
-    if (i > 1) elt.remove();
+    var patid = elt.getAttribute("patid");
+    if (patid != undefined) elt.remove();
   });
 }
 
@@ -260,7 +276,7 @@ function setPatternRow(tr, tempo, len, pause, repeat) {
 function newPattern() {
   addPattern(180, 10, 120, 2);
   var table = get("table.tpatterns");
-  var i = table.firstElementChild.childElementCount - 2;
+  var i = patterns.length - 1;
   var tr = addPatternRow(table, i);
   openInputs(tr);
 }
@@ -273,18 +289,73 @@ function initTable() {
     setPatternRow(tr, patterns[i].tempo, patterns[i].len, patterns[i].pause, patterns[i].repeat);
   }
 }
+
+// --------------------------- Utility methods --------------------------------
+
+function forEach(selector, func) {
+  var elements = getAll(selector);
+  Array.prototype.forEach.call(elements, func);
+}
+function get(id) {
+  return document.querySelector(id);
+}
+function getAll(id) {
+  return document.querySelectorAll(id);
+}
+function intInput(elt) {
+    try {
+      var v = parseInt(elt.value.trim(), 10);
+      return v || 0;
+    } catch(err) {
+      return 0;
+    }
+}
+function hide(elt) {
+  elt.style.display = "none";
+}
+function show(elt) {
+  elt.style.display = "";
+}
+function supportsBase64() {
+  return btoa && atob ? true : false;
+}
+function b64EncodeUnicode(str) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+    return String.fromCharCode('0x' + p1);
+  }));
+}
+function b64DecodeUnicode(str) {
+  return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+}
+// Extract URL parameters from current location
+function getParameterByName(name, defaultValue) {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+    results = regex.exec(location.search);
+  return results === null ? ((defaultValue != undefined) ? defaultValue : "") : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 function init() {
 
     // init patterns
-    var v = localStorage.getItem("cm_status");
-    try {
-      var status = v && JSON && JSON.parse ? JSON.parse(v) : undefined;
-      patterns = status.patterns;
-    } catch (ex) {
-      console.error("Invalid status in storage");
-      v = undefined;
+    var toimport = getParameterByName("import");
+    if (toimport && JSON && JSON.parse && supportsBase64()) {
+      var v = JSON.parse(b64DecodeUnicode(toimport));
+      patterns = v.patterns;
+      window.history.pushState({}, document.title, window.location.pathname);
+    } else {
+      var v = localStorage.getItem("cm_status");
+      try {
+        var status = v && JSON && JSON.parse ? JSON.parse(v) : undefined;
+        patterns = status.patterns;
+      } catch (ex) {
+        console.error("Invalid status in storage");
+      }
     }
-    if (!v) {
+
+    if (!patterns) {
       // default value
       patterns = [];
       addPattern(1, 1, 5*60, 1);
@@ -298,11 +369,38 @@ function init() {
     get("#play").onclick = letsGo;
     get("#stop").onclick = thisIsTheEnd;
     get("#clear").onclick = clearAllPatterns;
+    get("#share").onclick = openExport;
     get("#input-ok").onclick = validateInputs;
-    get("#input-cancel").onclick = closeBox;
+    get("#input-cancel").onclick = closeInputsBox;
     get("#input-clear").onclick = clearInputs;
+    get("#export-close").onclick = closeExport;
+    get(".copyonclick").onclick = copyOnClick;
     hide(get("#stop"));
     show(get("#play"));
+
+    get("#email").onclick = function() {
+      function doEmail(d, i, tail) {
+        location.href = "mailto:" + i + "@" + d + tail;
+      }
+      doEmail("gmail.com", "olivier.potonniee", "?subject=" + "cadence-me");
+      return false;
+    }
+
+
+    function promptKeyEvent(event) {
+      if (event.which == 27) {
+        cancelFunc();
+      } else if (event.keyCode == 13) {
+        okFunc();
+      }
+    }
+
+    forEach(".tinputs input", function(elt, i) {
+      elt.onkeyup = promptKeyEvent;
+    });
+    forEach("#export-box input", function(elt, i) {
+      elt.onkeyup = promptKeyEvent;
+    });
 
     // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
     // Http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js

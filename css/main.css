@@ -19,9 +19,9 @@ table.tpatterns .fa-ellipsis-v {
   display: none;
 }
 
-table.tinputs input {
-  padding: 1 2px !important;
-  width: 45px;
+.tpatterns-btns {
+  float: right;
+  font-size: 150%;
 }
 
 .tpatterns tr:nth-child(2) th:nth-child(2), .tpatterns tr:nth-child(2) th:nth-child(5) {
@@ -31,11 +31,14 @@ table.tinputs input {
   width: 55px
 }
 
-table.tpatterns td {
+table td, table.tinputs input {
   font-size: 18px;
-  text-align: right;
   font-family: sans-serif;
   font-weight: 700;
+}
+
+table.tpatterns td, table.tinputs td:nth-child(1) {
+  text-align: right;
 }
 
 table.tpatterns th {
@@ -44,7 +47,7 @@ table.tpatterns th {
 }
 
 th, td {
-  padding: 0 2px;
+  padding: 5px 2px;
 }
 table.tpatterns th:nth-child(odd), table.tpatterns td:nth-child(odd) {
   background-color: #9494b8;
@@ -71,16 +74,6 @@ table.tpatterns tr:nth-child(1) td:nth-child(1) {
 }
 #stop .round {
   background-color: #ff4d4d;
-}
-#clear {
-  background-color: #5A5B5E;
-}
-#clear .round {
-  background-color: #737478;
-}
-
-#clear {
-  float: right;
 }
 
 a.btn {
@@ -167,17 +160,43 @@ a.btn span.txt {
 }
 
 
-.footer {
-  text-align: center;
+table.tinputs {
+  border-collapse: collapse;
+  width: 100%;
 }
 
-table.tinputs tr {
+table.tinputs td {
   border-top: solid 1px black;
+  padding: 10px 0;
 }
+
+table.tinputs input {
+  padding: 1 2px !important;
+  width: 60px;
+}
+
+#export-val {
+  width: 90%;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.footer a:link, .footer a:visited {
+  text-decoration: none;
+  color: #1992ca;
+  padding: 0 20px;
+}
+
 /* for 480px or less */
 @media screen and (max-width: 480px) {
-  table.tinputs td {
-    display: table-row;
+  table.tinputs td:nth-child(1) {
+    text-align: left;
+  }
+  table.tinputs .time-input {
+    display: block;
   }
   /*
   table.tinputs td:nth-child(1) {

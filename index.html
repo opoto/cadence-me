@@ -13,7 +13,7 @@
   <body>
     <h1>Cadence Me!</h1>
 
-    <!-- Number input -->
+    <!-- Pattern form -->
     <div id="input-box" class="modal">
       <div class="modal-content">
         <table class="tinputs">
@@ -30,8 +30,8 @@
               Bips duration:
             </td>
             <td>
-              <input id="input-lenmin" type="number" min="0" max="999" value="0" />min
-              <input id="input-lensec" type="number" min="0" max="90" value="30" />sec
+              <span class="time-input"><input id="input-lenmin" type="number" min="0" max="999" value="0" />min</span>
+              <span class="time-input"><input id="input-lensec" type="number" min="0" max="90" value="30" />sec</span>
             </td>
           </tr>
           <tr>
@@ -39,8 +39,8 @@
               Pause bips:
             </td>
             <td>
-              <input id="input-pausemin" type="number" min="0" max="999" value="0" />min
-              <input id="input-pausesec" type="number" min="0" max="59" value="30" />sec
+              <span class="time-input"><input id="input-pausemin" type="number" min="0" max="999" value="0" />min</span>
+              <span class="time-input"><input id="input-pausesec" type="number" min="0" max="59" value="30" />sec</span>
             </td>
           </tr>
           <tr>
@@ -62,10 +62,23 @@
       </div>
     </div>
 
+    <!-- Export box -->
+    <div id="export-box" class="modal">
+      <div class="modal-content">
+        <p>
+          Copy and share your workout configuration through the link below (Ctrl+C & Enter):
+        </p>
+        <i class="fa fa-copy copyonclick" title="Copy link" id="-export-val"></i>
+        <input id="export-val" type="text" value="" readonly="readonly"/>
+        <p>
+          <button id="export-close">Close</button>
+        </p>
+      </div>
+    </div>
 
     <table class="tpatterns">
       <tr>
-        <td colspan="3">
+        <td colspan="6">
           <a id="play" class="btn">
             <span class="txt">Play</span>
             <span class="round"><i class="fa fa-play"></i></span>
@@ -74,12 +87,14 @@
             <span class="txt">Stop</span>
             <span class="round"><i class="fa fa-stop"></i></span>
           </a>
-        </td>
-        <td colspan="3">
-          <a id="clear" class="btn">
-            <span class="txt">Clear</span>
-            <span class="round"><i class="fa fa-ban"></i></span>
-          </a>
+          <span class="tpatterns-btns">
+            <a id="clear" title="Clear table">
+              <i class="fa fa-eraser"></i>
+            </a>
+            <a id="share" title="Share configuration">
+              <i class="fa fa-share-alt"></i>
+            </a>
+          </span>
         </td>
       </tr>
       <tr>
@@ -91,10 +106,25 @@
         <th><i class="fa fa-plus" onclick='newPattern()'></i></th>
       </tr>
     </table>
+    <div class="footer">
+      <a href="https://github.com/opoto/cadence-me/wiki" target="_blank">Help</a>
+      <a id="email" href="#">Contact</a>
+      <a href="https://github.com/opoto/cadence-me" target="_blank" title="WTracks project on Github" id="github-logo">
+        <svg height="24" viewBox="0 0 16 16" version="1.1" width="24"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
+      </a>
+    </div>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130678291-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-130678291-1');
+    </script>
+
     <script src="https://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
     <script src="js/cadence-me.js"></script>
-    <div class="footer">
-        <a href="https://github.com/opoto/cadence-me">Project on GitHub</a>
-    </div>
    </body>
 </html>
