@@ -255,8 +255,8 @@ function addPatternRow(patternsDiv, i) {
   row += "<span class='vlen'></span>";
   row += "<span class='vpause'></span>";
   row += "<span class='vrepeat'></span>";
-  row += "<span class='editdelete'><a onclick='openInputs($(this).parents(\"div.pattern\"))'><i class='fa fa-edit'></i></a>";
-  row += "    <a onclick='deletePattern($(this).parents(\"div.pattern\"))'><i class='fa fa-trash'></i></a></span>";
+  row += "<span class='editdelete'><a title='Edit this pattern' onclick='openInputs($(this).parents(\"div.pattern\"))'><i class='fa fa-edit'></i></a>";
+  row += "    <a title='Delete this pattern' onclick='deletePattern($(this).parents(\"div.pattern\"))'><i class='fa fa-trash'></i></a></span>";
   pat.html(row);
   patternsDiv.append(pat);
   return pat;
