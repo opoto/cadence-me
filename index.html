@@ -85,7 +85,7 @@
           <span class="txt">Play</span>
           <span class="round"><i class="fa fa-play"></i></span>
         </a>
-        <a id="stop" class="btn" title="Stop workout">
+        <a id="stop" class="btn" title="Stop workout" style="display:none">
           <span class="txt">Stop</span>
           <span class="round"><i class="fa fa-stop"></i></span>
         </a>
@@ -119,11 +119,26 @@
     </div>
 
     <div class="footer">
+      <a id="asamples" title="A few sample configuration" onclick="document.getElementById('samples').style.display='block';">Samples</a>
       <a href="https://github.com/opoto/cadence-me/wiki" target="_blank">Help</a>
       <a id="email" href="#">Contact</a>
       <a href="https://github.com/opoto/cadence-me" target="_blank" title="WTracks project on Github" id="github-logo">
         <svg height="24" viewBox="0 0 16 16" version="1.1" width="24"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
       </a>
+    </div>
+
+    <div id="samples" style="display:none">
+      <p><a id="close-samples" onclick="document.getElementById('samples').style.display='none';"><i class="fa fa-times"></i></a> Here are a few samples configurations:</p>
+      <dl>
+        <dt><a href="?import=eyJwYXR0ZXJucyI6W3sidGVtcG8iOjEsImxlbiI6MCwicGF1c2UiOjMwMCwicmVwZWF0IjoxfSx7InRlbXBvIjoxNzAsImxlbiI6MzAsInBhdXNlIjoxMjAsInJlcGVhdCI6NX0seyJ0ZW1wbyI6MTc1LCJsZW4iOjMwLCJwYXVzZSI6MTIwLCJyZXBlYXQiOjV9LHsidGVtcG8iOjE4MCwibGVuIjozMCwicGF1c2UiOjEyMCwicmVwZWF0Ijo1fV19">Progress to 180</a></dt>
+        <dd>Start with silence for 5min, to get warm at your own pace, then progressively go to 180.</dd>
+        <dt><a href="?import=eyJwYXR0ZXJucyI6W3sidGVtcG8iOjEyMCwibGVuIjoyMCwicGF1c2UiOjE2MCwicmVwZWF0IjoxfSx7InRlbXBvIjoxODAsImxlbiI6MjAsInBhdXNlIjoxNjAsInJlcGVhdCI6MX0seyJ0ZW1wbyI6MTIwLCJsZW4iOjIwLCJwYXVzZSI6MTYwLCJyZXBlYXQiOjF9LHsidGVtcG8iOjE4MCwibGVuIjoyMCwicGF1c2UiOjE2MCwicmVwZWF0IjoxfSx7InRlbXBvIjoxMjAsImxlbiI6MjAsInBhdXNlIjoxNjAsInJlcGVhdCI6MX0seyJ0ZW1wbyI6MTgwLCJsZW4iOjIwLCJwYXVzZSI6MTYwLCJyZXBlYXQiOjF9LHsidGVtcG8iOjEyMCwibGVuIjoyMCwicGF1c2UiOjE2MCwicmVwZWF0IjoxfSx7InRlbXBvIjoxODAsImxlbiI6MjAsInBhdXNlIjoxNjAsInJlcGVhdCI6MX0seyJ0ZW1wbyI6MTIwLCJsZW4iOjIwLCJwYXVzZSI6MTYwLCJyZXBlYXQiOjF9LHsidGVtcG8iOjE4MCwibGVuIjoyMCwicGF1c2UiOjE2MCwicmVwZWF0IjoxfSx7InRlbXBvIjoxMjAsImxlbiI6MjAsInBhdXNlIjoxNjAsInJlcGVhdCI6MX0seyJ0ZW1wbyI6MTgwLCJsZW4iOjIwLCJwYXVzZSI6MTYwLCJyZXBlYXQiOjF9LHsidGVtcG8iOjEyMCwibGVuIjoyMCwicGF1c2UiOjE2MCwicmVwZWF0IjoxfSx7InRlbXBvIjoxODAsImxlbiI6MjAsInBhdXNlIjoxNjAsInJlcGVhdCI6MX0seyJ0ZW1wbyI6MTIwLCJsZW4iOjIwLCJwYXVzZSI6MTYwLCJyZXBlYXQiOjF9LHsidGVtcG8iOjE4MCwibGVuIjoyMCwicGF1c2UiOjE2MCwicmVwZWF0IjoxfSx7InRlbXBvIjoxMjAsImxlbiI6MjAsInBhdXNlIjoxNjAsInJlcGVhdCI6MX0seyJ0ZW1wbyI6MTgwLCJsZW4iOjIwLCJwYXVzZSI6MTYwLCJyZXBlYXQiOjF9LHsidGVtcG8iOjEyMCwibGVuIjoyMCwicGF1c2UiOjE2MCwicmVwZWF0IjoxfSx7InRlbXBvIjoxODAsImxlbiI6MjAsInBhdXNlIjoxNjAsInJlcGVhdCI6MX1dfQ==">Feel the difference</a></dt>
+        <dd>Alternate between slow and fast sequences</dd>
+        <dt><a href="?import=eyJwYXR0ZXJucyI6W3sidGVtcG8iOjE4MCwibGVuIjoxNSwicGF1c2UiOjE4MCwicmVwZWF0IjoyMH1dfQ==">180</a></dt>
+        <dd>You're a '180' master, just do it!</dd>
+        <dt><a href="?import=eyJwYXR0ZXJucyI6W3sidGVtcG8iOjYwLCJsZW4iOjYwMCwicGF1c2UiOjAsInJlcGVhdCI6MX1dfQ==">Blues</a></dt>
+        <dd>Just to play the blues ;)</dd>
+      </dl>
     </div>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->

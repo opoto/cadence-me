@@ -272,11 +272,24 @@ button:active {
   margin-top: 10px;
 }
 
-.footer a:link, .footer a:visited {
+.footer a,
+.footer a:link, .footer a:visited,
+#samples a:link, #samples a:visited {
   text-decoration: none;
   color: #1992ca;
   padding: 0 20px;
   font-weight: bold;
+}
+
+#samples {
+  margin: 20px auto 0 auto;
+  max-width: 600px;
+  background-color: #EEE;
+  padding: 10px;
+  border-radius: 5px;
+}
+#samples dd {
+    margin: 5px 0 10px 35px;
 }
 
 /* for 480px or less */

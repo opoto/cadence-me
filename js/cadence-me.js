@@ -339,10 +339,9 @@ function init() {
     if (!patterns) {
       // default value
       patterns = [];
-      addPattern(1, 1, 5*60, 1);
-      addPattern(170, 30, 1*60, 5);
-      addPattern(180, 30, 1*60, 5);
-      addPattern(170, 15, 3*60, 20);
+      addPattern(170, 30, 10, 3);
+      addPattern(60, 15, 10, 2);
+      addPattern(180, 30, 10, 5);
     }
 
     initTable();
@@ -357,8 +356,6 @@ function init() {
     $("#input-clear").click(clearInputs);
     $("#export-close").click(closeExport);
     $(".copyonclick").click(copyOnClick);
-    $("#stop").hide();
-    $("#play").show();
 
     $("#email").click(function() {
       function doEmail(d, i, tail) {
