@@ -2,27 +2,25 @@ body, html {
   margin: 0px;
   padding: 10px;
   height: 100%;
+  font-family: sans-serif;
 }
 
 h1 {
   text-align: center;
-  font-family: cursive;
 }
 
 #btns, #headers, #patterns {
   margin: 0 auto;
   width: fit-content;
+  width: -moz-fit-content;
+  text-align: center;
 }
 
 .fa {
   margin: 2px;
 }
-#headers span  {
-  padding: 10px 0;
-}
 
 #clearshare {
-  float: right;
   font-size: 150%;
   margin-left: 50px;
 }
@@ -46,7 +44,6 @@ h1 {
 
 #patterns, table.tinputs td, table.tinputs input, #export-box p, #export-box input {
   font-size: 18px;
-  font-family: sans-serif;
   font-weight: 700;
 }
 table.tinputs input {
@@ -55,7 +52,6 @@ table.tinputs input {
 #patterns span, table.tinputs td:nth-child(1) {
   text-align: right;
 }
-
 #headers {
   font-size: 18px;
   text-align: center;
@@ -63,7 +59,7 @@ table.tinputs input {
 a {
   cursor: pointer;
 }
-.pattern, #headers div {
+.pattern {
   margin: 2px;
 }
 .tpatterns span {
@@ -73,19 +69,53 @@ a {
   display: inline-block;
   vertical-align: bottom;
 }
+#headers .vtempo, #headers .vlen, #headers .vpause, #headers .vrepeat   {
+  color: #222;
+}
+#headers span  {
+  padding: 10px 0;
+}
 .tpatterns span i, .tpatterns span a {
 }
-#patterns span:nth-child(odd) {
-  background-color: #9494b875;
-}
-#patterns span:nth-child(even) {
-  background-color: #d1d1e073;
-}
-#headers span:nth-child(odd) {
+#headers .pattern span:nth-child(odd) {
   background-color: #9494b8;
 }
-#headers span:nth-child(even) {
+#headers .pattern span:nth-child(even) {
+  background-color: #b3b3cc;
+}
+#headers .pattern {
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-top: solid 1px black;
+}
+#headers div span:first-child {
+  border-top-left-radius: 10px;
+}
+#headers div span:last-child {
+  border-top-right-radius: 10px;
+}
+#patterns span:nth-child(odd) {
   background-color: #d1d1e0;
+}
+#patterns span:nth-child(even) {
+  background-color: #f0f0f5;
+}
+#patterns .pattern:last-child {
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom: solid 1px black;
+}
+#patterns .pattern:last-child span:first-child {
+  border-bottom-left-radius: 10px;
+}
+#patterns .pattern:last-child span:last-child {
+  border-bottom-right-radius: 10px;
+}
+.pattern {
+  border-left: solid 1px black;
+}
+.pattern {
+  border-right: solid 1px black;
 }
 
 #btns {
@@ -117,7 +147,6 @@ a.btn {
   padding: 12px 53px 12px 23px;
   color: #fff;
   text-transform: uppercase;
-  font-family: sans-serif;
   font-weight: bold;
   position: relative;
   display: inline-block;
@@ -225,7 +254,6 @@ button {
 	display:inline-block;
 	cursor:pointer;
 	color:#ffffff;
-	font-family:Arial;
 	font-size:17px;
 	padding:8px 24px;
 	text-decoration:none;
@@ -248,7 +276,7 @@ button:active {
   text-decoration: none;
   color: #1992ca;
   padding: 0 20px;
-  font-family: fantasy;
+  font-weight: bold;
 }
 
 /* for 480px or less */

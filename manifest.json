@@ -1,0 +1,24 @@
+{
+  "short_name": "Cadence Me!",
+  "name": "Cadence Me! - Give a boost to your workouts",
+  "icons": [
+    {
+      "src": "img/cadenceme-icon-1x.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "img/cadenceme-icon-2x.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "img/cadenceme-icon-4x.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone"
+
+}
