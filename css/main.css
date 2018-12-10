@@ -3,36 +3,48 @@ body, html {
   padding: 10px;
   height: 100%;
 }
+
 h1 {
   text-align: center;
   font-family: cursive;
 }
 
-table.tpatterns {
+#btns, #headers, #patterns {
   margin: 0 auto;
+  width: fit-content;
 }
 
-table.tpatterns .fa {
+.fa {
   margin: 2px;
 }
-
-table.tpatterns .fa-ellipsis-v {
-  display: none;
+#headers span  {
+  padding: 10px 0;
 }
 
-.tpatterns-btns {
+#clearshare {
   float: right;
   font-size: 150%;
+  margin-left: 50px;
+}
+#clearshare a {
+  margin-left: 10px;
 }
 
-.tpatterns tr:nth-child(2) th:nth-child(2), .tpatterns tr:nth-child(2) th:nth-child(5) {
-  width: 35px
+.drag-handle {
+  width: 15px;
+  text-align: center !important;
 }
-.tpatterns tr:nth-child(2) th:nth-child(3), .tpatterns tr:nth-child(2) th:nth-child(4) {
-  width: 55px
+.vtempo, .vrepeat {
+  width: 35px;
+}
+.vlen, .vpause {
+  width: 55px;
+}
+.editdelete {
+  width: 55px;
 }
 
-table td, table.tinputs input, #export-box p, #export-box input {
+#patterns, table.tinputs td, table.tinputs input, #export-box p, #export-box input {
   font-size: 18px;
   font-family: sans-serif;
   font-weight: 700;
@@ -40,29 +52,47 @@ table td, table.tinputs input, #export-box p, #export-box input {
 table.tinputs input {
   text-align: right;
 }
-table.tpatterns td, table.tinputs td:nth-child(1) {
+#patterns span, table.tinputs td:nth-child(1) {
   text-align: right;
 }
 
-table.tpatterns th {
+#headers {
   font-size: 18px;
   text-align: center;
 }
-
-th, td {
-  padding: 5px 2px;
+a {
+  cursor: pointer;
 }
-table.tpatterns th:nth-child(odd), table.tpatterns td:nth-child(odd) {
+.pattern, #headers div {
+  margin: 2px;
+}
+.tpatterns span {
+  padding: 5px 2px;
+  line-height: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+.tpatterns span i, .tpatterns span a {
+}
+#patterns span:nth-child(odd) {
+  background-color: #9494b875;
+}
+#patterns span:nth-child(even) {
+  background-color: #d1d1e073;
+}
+#headers span:nth-child(odd) {
   background-color: #9494b8;
 }
-table.tpatterns th:nth-child(even), table.tpatterns td:nth-child(even) {
+#headers span:nth-child(even) {
   background-color: #d1d1e0;
 }
-table.tpatterns tr:nth-child(1) td {
+
+#btns {
   background-color: white;
   padding-bottom: 20px;
 }
-table.tpatterns tr:nth-child(1) td:nth-child(1) {
+#playstop {
   text-align: left;
 }
 

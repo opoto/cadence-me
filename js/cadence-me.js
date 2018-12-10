@@ -155,11 +155,11 @@ function clearInputs() {
     $("table.tinputs input").val("");
 }
 
-var inputTr;
+var inputPat;
 var okFunc;
 var cancelFunc;
 function openInputs(tr) {
-  inputTr = tr;
+  inputPat = tr;
   var i = parseInt(tr.attr("patid"));
   $("#input-tempo").val(patterns[i].tempo);
   $("#input-lenmin").val(Math.floor(patterns[i].len/60));
@@ -178,12 +178,12 @@ function closeInputsBox() {
 }
 
 function validateInputs() {
-  var i = parseInt(inputTr.attr("patid"));
+  var i = parseInt(inputPat.attr("patid"));
   patterns[i].tempo = intInput($("#input-tempo"));
   patterns[i].len = (intInput($("#input-lenmin")) * 60) + intInput($("#input-lensec"));
   patterns[i].pause = (intInput($("#input-pausemin")) * 60) + intInput($("#input-pausesec"));
   patterns[i].repeat = intInput($("#input-repeat"));
-  setPatternRow(inputTr, patterns[i].tempo, patterns[i].len, patterns[i].pause, patterns[i].repeat);
+  setPatternRow(inputPat, patterns[i].tempo, patterns[i].len, patterns[i].pause, patterns[i].repeat);
   closeInputsBox();
   saveStatus();
 }
@@ -225,42 +225,41 @@ function copyOnClick(event) {
 
 
 function clearTable() {
-  $("table.tpatterns tr.pattern").remove();
+  $("#patterns div.pattern").remove();
 }
 
 function clearAllPatterns() {
-  if (confirm("Clear all table?")) {
+  if (confirm("Clear all patterns?")) {
     clearTable();
     patterns = [];
     saveStatus();
   }
 }
 
-function deletePattern(tr) {
+function deletePattern(pat) {
   if (confirm("Delete this pattern?")) {
-    var i = parseInt(tr.attr("patid"));
+    var i = parseInt(pat.attr("patid"));
     patterns.splice(i, 1);
-    tr.remove();
+    pat.remove();
     saveStatus();
   }
 }
 
-function addPatternRow(table, i) {
-  var tr = $(document.createElement("tr"));
-  tr.attr("patid", i);
-  tr.attr("class", "pattern");
+function addPatternRow(patternsDiv, i) {
+  var pat = $(document.createElement("div"));
+  pat.attr("patid", i);
+  pat.attr("class", "pattern");
   var row = "";
-  row += "<td><i class='fa fa-ellipsis-v'></i></td>";
-  row += "<td class='vtempo'></td>";
-  row += "<td class='vlen'></td>";
-  row += "<td class='vpause'></td>";
-  row += "<td class='vrepeat'></td>";
-  row += "<td><a onclick='openInputs($(this).parents(\"tr\"))'><i class='fa fa-edit'></i></a>";
-  row += "    <a onclick='deletePattern($(this).parents(\"tr\"))'><i class='fa fa-trash'></i></a></td>";
-  row += "</tr>";
-  tr.html(row);
-  table.first().append(tr);
-  return tr;
+  row += "<span class='drag-handle'><i class='fa fa-ellipsis-v'></i></span>";
+  row += "<span class='vtempo'></span>";
+  row += "<span class='vlen'></span>";
+  row += "<span class='vpause'></span>";
+  row += "<span class='vrepeat'></span>";
+  row += "<span class='editdelete'><a onclick='openInputs($(this).parents(\"div.pattern\"))'><i class='fa fa-edit'></i></a>";
+  row += "    <a onclick='deletePattern($(this).parents(\"div.pattern\"))'><i class='fa fa-trash'></i></a></span>";
+  pat.html(row);
+  patternsDiv.append(pat);
+  return pat;
 }
 
 function setPatternRow(tr, tempo, len, pause, repeat) {
@@ -272,7 +271,7 @@ function setPatternRow(tr, tempo, len, pause, repeat) {
 
 function newPattern() {
   addPattern(180, 10, 120, 2);
-  var table = $("table.tpatterns");
+  var table = $("#patterns");
   var i = patterns.length - 1;
   var tr = addPatternRow(table, i);
   openInputs(tr);
@@ -280,7 +279,7 @@ function newPattern() {
 
 function initTable() {
   clearTable();
-  var table = $("table.tpatterns");
+  var table = $("#patterns");
   for (var i=0; i < patterns.length; i++) {
     var tr = addPatternRow(table, i);
     setPatternRow(tr, patterns[i].tempo, patterns[i].len, patterns[i].pause, patterns[i].repeat);
@@ -352,6 +351,7 @@ function init() {
     $("#stop").click(thisIsTheEnd);
     $("#clear").click(clearAllPatterns);
     $("#share").click(openExport);
+    $("#add").click(newPattern);
     $("#input-ok").click(validateInputs);
     $("#input-cancel").click(closeInputsBox);
     $("#input-clear").click(clearInputs);
@@ -379,6 +379,23 @@ function init() {
 
     $(".tinputs input").keyup(promptKeyEvent);
     $("#export-box input").keyup(promptKeyEvent);
+
+    // sortable
+    $("#patterns").sortable({
+      //scroll: true,
+      nodes: ".pattern",
+      handle: ".drag-handle, .vtempo, .vlen, .vpause, .vrepeat",
+      update: function(evt) {
+        newpatterns = [];
+        $("#patterns div.pattern").each(function(i, elt){
+          var id = parseInt($(elt).attr("patid"));
+          newpatterns.push(patterns[id]);
+          $(elt).attr("patid", i);
+        });
+        patterns = newpatterns;
+        saveStatus();
+      }
+    });
 
     // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
     // Http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js
