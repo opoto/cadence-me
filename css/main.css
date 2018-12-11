@@ -11,8 +11,7 @@ h1 {
 
 #btns, #headers, #patterns {
   margin: 0 auto;
-  width: fit-content;
-  width: -moz-fit-content;
+  display: table;
   text-align: center;
 }
 

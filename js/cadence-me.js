@@ -214,7 +214,7 @@ function copyOnClick(event) {
     var elt = $("#" + event.target.id.substring(1));
     elt.select();
     document.execCommand("copy");
-    var tmp = elt.value;
+    var tmp = elt.val();
     elt.val("Text copied to clipboard");
     setTimeout(function(){
       elt.val(tmp);
