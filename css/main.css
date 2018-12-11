@@ -65,14 +65,11 @@ a {
   padding: 5px 2px;
   line-height: 20px;
   height: 20px;
-  display: inline-block;
+  display: table-cell;
   vertical-align: bottom;
 }
 #headers .vtempo, #headers .vlen, #headers .vpause, #headers .vrepeat   {
   color: #222;
-}
-#headers span  {
-  padding: 10px 0;
 }
 .tpatterns span i, .tpatterns span a {
 }

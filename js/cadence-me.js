@@ -343,7 +343,7 @@ function init() {
       addPattern(60, 15, 10, 2);
       addPattern(180, 30, 10, 5);
     }
-
+    saveStatus();
     initTable();
 
     $("#play").click(letsGo);
