@@ -328,7 +328,7 @@ function init() {
       window.history.pushState({}, document.title, window.location.pathname);
     } else {
       var v = localStorage.getItem("cm_status");
-      try {
+      if (v) try {
         var status = v && JSON && JSON.parse ? JSON.parse(v) : undefined;
         patterns = status.patterns;
       } catch (ex) {
