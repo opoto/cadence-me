@@ -241,6 +241,9 @@ function deletePattern(pat) {
     var i = parseInt(pat.attr("patid"));
     patterns.splice(i, 1);
     pat.remove();
+    $("#patterns .pattern").each(function(i, elt) {
+      $(elt).attr("patid", i);
+    });
     saveStatus();
   }
 }
@@ -336,7 +339,8 @@ function init() {
       }
     }
 
-    if (!patterns) {
+    // warning: safari assigns patterns with #patterns DOM element
+    if (!Array.isArray(patterns)) {
       // default value
       patterns = [];
       addPattern(170, 30, 10, 3);
