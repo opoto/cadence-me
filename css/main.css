@@ -269,15 +269,18 @@ button:active {
 
 .footer {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 30px;
 }
+
+.footer a:link, .footer a:visited {
+  padding: 0 0 0 30px;
+ }
 
 .footer a,
 .footer a:link, .footer a:visited,
 #samples a:link, #samples a:visited {
   text-decoration: none;
   color: #1992ca;
-  padding: 0 20px;
   font-weight: bold;
 }
 
@@ -291,6 +294,10 @@ button:active {
 #samples dd {
     margin: 5px 0 10px 35px;
 }
+#samples #close-samples {
+    float: right;
+    margin: -15px 5px 0 0;
+}
 
 /* for 480px or less */
 @media screen and (max-width: 480px) {
@@ -300,8 +307,12 @@ button:active {
   table.tinputs .time-input {
     display: block;
   }
-  /*
-  table.tinputs td:nth-child(1) {
-    border-top: solid 1px black;
-  }*/
+  @media screen and (max-width: 320px) {
+    #headers, #footer, #samples {
+      font-size: 16px;
+    }
+    .footer a:link, .footer a:visited {
+      padding: 0 0 0 15px;
+     }
+  }
 }
