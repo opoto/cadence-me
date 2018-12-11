@@ -58,8 +58,8 @@ table.tinputs input {
 a {
   cursor: pointer;
 }
-.pattern {
-  margin: 2px;
+#patterns .pattern {
+  border-top: 1px dashed;
 }
 .tpatterns span {
   padding: 5px 2px;
