@@ -398,6 +398,17 @@ function init() {
       }
     });
 
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+      .then(function(registration) {
+        // Registration was successful
+        console.log('[SW registration success] scope: ', registration.scope);
+      }, function(err) {
+        // registration failed :(
+        console.log('[SW registration fail]: ', err);
+      });;
+    }
+
     // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
     // Http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js
     // TO WORK ON CURRENT CHROME!!  But this means our code can be properly
