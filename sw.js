@@ -1,38 +1,28 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.6.1/workbox-sw.js');
 
 if (workbox) {
+
+  /* *
+  workbox.setConfig({
+    debug: true
+  });
+  workbox.core.setLogLevel(workbox.core.LOG_LEVELS.debug);
+  /* */
+
   workbox.routing.registerRoute(
-    /index\.html/,
-    // https://developers.google.com/web/tools/workbox/reference-docs/latest/workbox.strategies
+    new RegExp('/cadence-me/.*'),
     workbox.strategies.networkFirst({
-      cacheName: 'cadenceme:html',
+      cacheName: 'cadenceme:local',
     })
   );
 
   workbox.routing.registerRoute(
-    /\//,
-    // https://developers.google.com/web/tools/workbox/reference-docs/latest/workbox.strategies
-    workbox.strategies.networkFirst({
-      cacheName: 'cadenceme:html',
-    })
-  );
-
-  workbox.routing.registerRoute(
-    new RegExp('.*\.js'),
-    workbox.strategies.networkFirst({
-      cacheName: 'cadenceme:js',
-    })
-  );
-
-  workbox.routing.registerRoute(
-    // Cache CSS files
-    /.*\.(?:css|png|ico)/,
-    // Use cache but update in the background ASAP
+    new RegExp('.*'),
     workbox.strategies.staleWhileRevalidate({
-      // Use a custom cache name
-      cacheName: 'cadenceme:css',
+      cacheName: 'cadenceme:ext',
     })
   );
+
 
 } else {
   console.log(`Workbox didn't load 😬`);
