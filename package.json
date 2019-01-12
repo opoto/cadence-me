@@ -1,0 +1,23 @@
+{
+  "name": "cadence-me",
+  "version": "1.0.0",
+  "description": "Program your workouts intensity with a metronome that will periodically give you a cadence.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opoto/cadence-me.git"
+  },
+  "keywords": [
+    "workout",
+    "cadencer"
+  ],
+  "author": "Olivier Potonniee",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/opoto/cadence-me/issues"
+  },
+  "homepage": "https://github.com/opoto/cadence-me#readme"
+}

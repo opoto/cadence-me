@@ -1,7 +1,7 @@
+/* eslint-disable no-console */
 var audioContext = null;
 var unlocked = false;
 var isPlaying = false;      // Are we currently playing?
-var startTime;              // The start time of the entire sequence.
 var current16thNote;        // What note is currently last scheduled?
 var tempo = 120.0;          // tempo (in beats per minute)
 var lookahead = 25.0;       // How frequently to call scheduling function
@@ -15,9 +15,9 @@ var noteLength = 0.05;      // length of "beep" (in seconds)
 var notesInQueue = [];      // the notes that have been put into the web audio,
                             // and may or may not have played yet. {note, time}
 var timerWorker = null;     // The Web Worker used to fire timer messages
-var FREQ_BIP1 = 880.0;
-var FREQ_BIP4  = 440.0;
-var FREQ_BIP16 = 220.0;
+var FREQ_BIP1 = 880.0;      // high tone
+//var FREQ_BIP4  = 440.0;   // medium tone
+var FREQ_BIP16 = 220.0;     // low tone
 var patterns;
 
 function nextNote() {
@@ -66,7 +66,6 @@ function scheduler() {
 
 var patnum,
     patrepeat,
-    isPlaying,
     pattimer;
 
 function next() {
@@ -133,7 +132,7 @@ function addPattern(tempo, len, pause, repeat) {
 
 function saveStatus() {
   if (JSON && JSON.stringify) {
-    v = JSON.stringify({
+    var v = JSON.stringify({
       patterns: patterns
     });
     localStorage.setItem("cm_status", v);
@@ -195,7 +194,7 @@ function closeExport() {
 function openExport() {
   if (supportsBase64() && JSON && JSON.stringify) {
     $("#export-box").css("display", "block");
-    v = JSON.stringify({
+    var v = JSON.stringify({
       patterns: patterns
     });
     var data = b64EncodeUnicode(v);
@@ -237,6 +236,7 @@ function clearAllPatterns() {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function deletePattern(pat) {
   if (confirm("Delete this pattern?")) {
     var i = parseInt(pat.attr("patid"));
@@ -316,7 +316,7 @@ function b64DecodeUnicode(str) {
 }
 // Extract URL parameters from current location
 function getParameterByName(name, defaultValue) {
-  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  name = name.replace(/[[]/, "\\[").replace(/[\]]/, "\\]");
   var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
     results = regex.exec(location.search);
   return results === null ? ((defaultValue != undefined) ? defaultValue : "") : decodeURIComponent(results[1].replace(/\+/g, " "));
@@ -327,13 +327,13 @@ function init() {
     // init patterns
     var toimport = getParameterByName("import");
     if (toimport && JSON && JSON.parse && supportsBase64()) {
-      var v = JSON.parse(b64DecodeUnicode(toimport));
-      patterns = v.patterns;
+      var jsparsed = JSON.parse(b64DecodeUnicode(toimport));
+      patterns = jsparsed.patterns;
       window.history.pushState({}, document.title, window.location.pathname);
     } else {
-      var v = localStorage.getItem("cm_status");
-      if (v) try {
-        var status = v && JSON && JSON.parse ? JSON.parse(v) : undefined;
+      var saved = localStorage.getItem("cm_status");
+      if (saved) try {
+        var status = saved && JSON && JSON.parse ? JSON.parse(saved) : undefined;
         patterns = status.patterns;
       } catch (ex) {
         console.error("Invalid status in storage");
@@ -387,8 +387,8 @@ function init() {
       //scroll: true,
       nodes: ".pattern",
       handle: ".drag-handle, .vtempo, .vlen, .vpause, .vrepeat",
-      update: function(evt) {
-        newpatterns = [];
+      update: function() {
+        var newpatterns = [];
         $("#patterns div.pattern").each(function(i, elt){
           var id = parseInt($(elt).attr("patid"));
           newpatterns.push(patterns[id]);
@@ -407,7 +407,7 @@ function init() {
       }, function(err) {
         // registration failed :(
         console.log('[SW registration fail]: ', err);
-      });;
+      });
     }
 
     // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
