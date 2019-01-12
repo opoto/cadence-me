@@ -144,6 +144,7 @@ function letsGo() {
     // play
     if (patterns.length > 0) {
       patnum = 0;
+      patrepeat = 1;
       isPlaying = false;
       next();
       $("#stop").show();
