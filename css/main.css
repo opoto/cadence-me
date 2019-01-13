@@ -21,7 +21,7 @@ h1 {
 
 #clearshare {
   font-size: 150%;
-  margin-left: 50px;
+  margin-left: 25px;
 }
 #clearshare a {
   margin-left: 10px;
@@ -48,7 +48,7 @@ h1 {
 table.tinputs input {
   text-align: right;
 }
-#patterns span, table.tinputs td:nth-child(1) {
+#patterns span {
   text-align: right;
 }
 #headers {
@@ -70,8 +70,6 @@ a {
 }
 #headers .vtempo, #headers .vlen, #headers .vpause, #headers .vrepeat   {
   color: #222;
-}
-.tpatterns span i, .tpatterns span a {
 }
 #headers .pattern span:nth-child(odd) {
   background-color: #9494b8;
@@ -218,14 +216,17 @@ a.btn span.txt {
 }
 
 
-table.tinputs {
+table.tinputs, table.tsettings {
   border-collapse: collapse;
   width: 100%;
 }
 
-table.tinputs td {
+table.tinputs td, table.tsettings td {
   border-top: solid 1px black;
   padding: 10px 0;
+}
+table.tsettings td:nth-child(1) {
+  width: 80px;
 }
 
 table.tinputs input {
@@ -240,6 +241,9 @@ table.tinputs input {
   font-size: 18px;
 }
 
+#settings-box .modal-content {
+  width: 300px;
+}
 
 button {
 	background-color:#9e9e9e;

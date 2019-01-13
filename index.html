@@ -112,6 +112,25 @@
       </div>
     </div>
 
+    <!-- Settings box -->
+    <div id="settings-box" class="modal">
+      <div class="modal-content">
+        <table class="tsettings">
+          <tr>    
+            <td>Volume:</td>
+            <td><input id="setting-gain" type="range" min="0" max="100"/></td>
+          </tr>
+          <tr>    
+            <td>Mark 4th:</td>
+            <td><input id="setting-mark4th" type="checkbox"/></td>
+          </tr>
+          <tr>
+            <td colspan="2"><button id="settings-close">Close</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  
     <div id="btns">
       <span id="playstop">
         <a id="play" class="btn" title="Start workout">
@@ -129,6 +148,9 @@
         </a>
         <a id="share" title="Share configuration">
           <i class="fa fa-share-alt-square"></i>
+        </a>
+        <a id="settings" title="Settings">
+            <i class="fa fa-cog"></i>
         </a>
       </span>
     </div>

@@ -1,5 +1,8 @@
 /* eslint-disable no-console */
 var audioContext = null;
+var gainNode;
+var gainValue;
+var mark4th = false;
 var unlocked = false;
 var isPlaying = false;      // Are we currently playing?
 var current16thNote;        // What note is currently last scheduled?
@@ -15,8 +18,8 @@ var noteLength = 0.05;      // length of "beep" (in seconds)
 var notesInQueue = [];      // the notes that have been put into the web audio,
                             // and may or may not have played yet. {note, time}
 var timerWorker = null;     // The Web Worker used to fire timer messages
-var FREQ_BIP1 = 880.0;      // high tone
-//var FREQ_BIP4  = 440.0;   // medium tone
+var FREQ_BIP1  = 880.0;     // high tone
+var FREQ_BIP4  = 440.0;     // medium tone
 var FREQ_BIP16 = 220.0;     // low tone
 var patterns;
 
@@ -33,35 +36,40 @@ function nextNote() {
 }
 
 function scheduleNote( beatNumber, time ) {
-    // push the note on the queue, even if we're not playing.
-    notesInQueue.push( { note: beatNumber, time: time } );
+  // push the note on the queue, even if we're not playing.
+  notesInQueue.push( { note: beatNumber, time: time } );
 
-    if ( (noteResolution==1) && (beatNumber%2))
-        return; // we're not playing non-8th 16th notes
-    if ( (noteResolution==2) && (beatNumber%4))
-        return; // we're not playing non-quarter 8th notes
+  if ( (noteResolution==1) && (beatNumber%2)) {
+    return; // we're not playing non-8th 16th notes
+  }
+  if ( (noteResolution==2) && (beatNumber%4)) {
+    return; // we're not playing non-quarter 8th notes
+  }
 
-    // create an oscillator
-    var osc = audioContext.createOscillator();
-    osc.connect( audioContext.destination );
-    if (beatNumber % 16 === 0)    // beat 0 == high pitch
-        osc.frequency.value = FREQ_BIP1;
-    else if (beatNumber % 4 === 0 )    // quarter notes = medium pitch
-        osc.frequency.value = FREQ_BIP1;
-    else                        // other 16th notes = low pitch
-        osc.frequency.value = FREQ_BIP16;
+  // create an oscillator
+  var osc = audioContext.createOscillator();
+  // Connect the oscillator to the gain node.
+  osc.connect(gainNode);
+  if (beatNumber % 16 === 0) {          // beat 0 == high pitch
+    osc.frequency.value = FREQ_BIP1;
+  } else if (beatNumber % 4 === 0 ) {   // quarter notes = medium pitch
+    osc.frequency.value = mark4th ? FREQ_BIP4 : FREQ_BIP1;
+  } else {                              // other 16th notes = low pitch
+    osc.frequency.value = FREQ_BIP16;
+  }
 
-    osc.start( time );
-    osc.stop( time + noteLength );
+
+  osc.start( time );
+  osc.stop( time + noteLength );
 }
 
 function scheduler() {
-    // while there are notes that will need to play before the next interval,
-    // schedule them and advance the pointer.
-    while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
-        scheduleNote( current16thNote, nextNoteTime );
-        nextNote();
-    }
+  // while there are notes that will need to play before the next interval,
+  // schedule them and advance the pointer.
+  while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
+    scheduleNote( current16thNote, nextNoteTime );
+    nextNote();
+  }
 }
 
 var patnum,
@@ -133,7 +141,9 @@ function addPattern(tempo, len, pause, repeat) {
 function saveStatus() {
   if (JSON && JSON.stringify) {
     var v = JSON.stringify({
-      patterns: patterns
+      patterns: patterns,
+      gainValue: gainValue,
+      mark4th: mark4th
     });
     localStorage.setItem("cm_status", v);
   }
@@ -207,6 +217,32 @@ function openExport() {
   } else {
     alert("Your browser does not support this feature");
   }
+}
+
+function setGainValue(v) {
+  var fraction = v / 100;
+  gainNode.gain.value = fraction;
+}
+function changeVolume(event) {
+  gainValue = parseInt(event.target.value);
+  setGainValue(gainValue);
+  saveStatus();
+}
+
+function changeMark4th(event) {
+  mark4th = event.target.checked;
+  saveStatus();
+}
+
+function closeSettings() {
+  $("#settings-box").hide();
+}
+function openSettings() {
+  $("#setting-gain").val(gainValue);
+  $("#setting-mark4th").val(mark4th);
+  $("#settings-box").css("display", "block");
+  okFunc = closeSettings;
+  cancelFunc = closeSettings;
 }
 
 function copyOnClick(event) {
@@ -335,6 +371,8 @@ function init() {
       if (saved) try {
         var status = saved && JSON && JSON.parse ? JSON.parse(saved) : undefined;
         patterns = status.patterns;
+        gainValue = status.gainValue ? status.gainValue : 1;
+        mark4th = status.mark4th ? status.mark4th : false;
       } catch (ex) {
         console.error("Invalid status in storage");
       }
@@ -355,6 +393,12 @@ function init() {
     $("#stop").click(thisIsTheEnd);
     $("#clear").click(clearAllPatterns);
     $("#share").click(openExport);
+
+    $("#settings").click(openSettings);
+    $("#setting-gain").change(changeVolume);
+    $("#setting-mark4th").change(changeMark4th);
+    $("#settings-close").click(closeSettings);
+
     $("#add").click(newPattern);
     $("#input-ok").click(validateInputs);
     $("#input-cancel").click(closeInputsBox);
@@ -371,16 +415,21 @@ function init() {
     });
 
 
-    function promptKeyEvent(event) {
+    function onKeyEvent(event) {
       if (event.which == 27) {
-        cancelFunc();
+        if (cancelFunc) {
+          cancelFunc();
+          cancelFunc = undefined;
+        }
       } else if (event.keyCode == 13) {
-        okFunc();
+        if (okFunc) {
+          okFunc();
+          okFunc = undefined;
+        }
       }
     }
 
-    $(".tinputs input").keyup(promptKeyEvent);
-    $("#export-box input").keyup(promptKeyEvent);
+    $("body").keyup(onKeyEvent);
 
     // sortable
     $("#patterns").sortable({
@@ -416,6 +465,9 @@ function init() {
     // spec-compliant, and work on Chrome, Safari and Firefox.
 
     audioContext = new AudioContext();
+    gainNode = audioContext.createGain();
+    setGainValue(gainValue);
+    gainNode.connect(audioContext.destination);
 
     // if we wanted to load audio files, etc., this is where we should do it.
 
