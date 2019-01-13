@@ -41,14 +41,15 @@ h1 {
   width: 55px;
 }
 
-#patterns, table.tinputs td, table.tinputs input, #export-box p, #export-box input {
+#patterns, table.tinputs td, table.tinputs input, table.tsettings td,
+#export-box p, #export-box input {
   font-size: 18px;
   font-weight: 700;
 }
 table.tinputs input {
   text-align: right;
 }
-#patterns span {
+#patterns span, table.tinputs td:nth-child(1) {
   text-align: right;
 }
 #headers {
@@ -226,7 +227,7 @@ table.tinputs td, table.tsettings td {
   padding: 10px 0;
 }
 table.tsettings td:nth-child(1) {
-  width: 80px;
+  width: 100px;
 }
 
 table.tinputs input {
