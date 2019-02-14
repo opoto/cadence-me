@@ -128,13 +128,21 @@ function thisIsTheEnd() {
     console.log("done.");
 }
 
-function addPattern(tempo, len, pause, repeat) {
-  var pat = {
+// create pattern object
+function newPattern(tempo, len, pause, repeat) {
+  return {
     'tempo': tempo,
     'len': len,
     'pause': pause,
     'repeat': repeat
   };
+}
+// create and add pattern object
+function addNewPattern(tempo, len, pause, repeat) {
+  patterns.push(newPattern(tempo, len, pause, repeat));
+}
+// create and add pattern object
+function addPattern(pat) {
   patterns.push(pat);
 }
 
@@ -165,18 +173,23 @@ function clearInputs() {
     $("table.tinputs input").val("");
 }
 
+// eslint-disable-next-line no-unused-vars
+function editPattern(tr) {
+  var i = parseInt(tr.attr("patid"));
+  openInputs(patterns[i], tr);
+}
+
 var inputPat;
 var okFunc;
 var cancelFunc;
-function openInputs(tr) {
+function openInputs(pat, tr) {
   inputPat = tr;
-  var i = parseInt(tr.attr("patid"));
-  $("#input-tempo").val(patterns[i].tempo);
-  $("#input-lenmin").val(Math.floor(patterns[i].len/60));
-  $("#input-lensec").val((patterns[i].len%60));
-  $("#input-pausemin").val(Math.floor(patterns[i].pause/60));
-  $("#input-pausesec").val((patterns[i].pause%60));
-  $("#input-repeat").val(patterns[i].repeat);
+  $("#input-tempo").val(pat.tempo);
+  $("#input-lenmin").val(Math.floor(pat.len/60));
+  $("#input-lensec").val((pat.len%60));
+  $("#input-pausemin").val(Math.floor(pat.pause/60));
+  $("#input-pausesec").val((pat.pause%60));
+  $("#input-repeat").val(pat.repeat);
   $("#input-box").css("display", "block");
   $("#input-tempo").select();
   okFunc = validateInputs;
@@ -188,12 +201,22 @@ function closeInputsBox() {
 }
 
 function validateInputs() {
-  var i = parseInt(inputPat.attr("patid"));
-  patterns[i].tempo = intInput($("#input-tempo"));
-  patterns[i].len = (intInput($("#input-lenmin")) * 60) + intInput($("#input-lensec"));
-  patterns[i].pause = (intInput($("#input-pausemin")) * 60) + intInput($("#input-pausesec"));
-  patterns[i].repeat = intInput($("#input-repeat"));
-  setPatternRow(inputPat, patterns[i].tempo, patterns[i].len, patterns[i].pause, patterns[i].repeat);
+  var i;
+  if (!inputPat) {
+    addPattern({});
+    var table = $("#patterns");
+    i = patterns.length - 1;
+    inputPat = addPatternRow(table, i);
+  } else {
+    i = parseInt(inputPat.attr("patid"));
+  }
+
+  var pat = patterns[i];
+  pat.tempo = intInput($("#input-tempo"));
+  pat.len = (intInput($("#input-lenmin")) * 60) + intInput($("#input-lensec"));
+  pat.pause = (intInput($("#input-pausemin")) * 60) + intInput($("#input-pausesec"));
+  pat.repeat = intInput($("#input-repeat"));
+  setPatternRow(inputPat, pat.tempo, pat.len, pat.pause, pat.repeat);
   closeInputsBox();
   saveStatus();
 }
@@ -295,7 +318,7 @@ function addPatternRow(patternsDiv, i) {
   row += "<span class='vlen'></span>";
   row += "<span class='vpause'></span>";
   row += "<span class='vrepeat'></span>";
-  row += "<span class='editdelete'><a title='Edit this pattern' onclick='openInputs($(this).parents(\"div.pattern\"))'><i class='fa fa-edit'></i></a>";
+  row += "<span class='editdelete'><a title='Edit this pattern' onclick='editPattern($(this).parents(\"div.pattern\"))'><i class='fa fa-edit'></i></a>";
   row += "    <a title='Delete this pattern' onclick='deletePattern($(this).parents(\"div.pattern\"))'><i class='fa fa-trash'></i></a></span>";
   pat.html(row);
   patternsDiv.append(pat);
@@ -309,12 +332,9 @@ function setPatternRow(tr, tempo, len, pause, repeat) {
   tr.find(".vrepeat").text(repeat);
 }
 
-function newPattern() {
-  addPattern(180, 10, 120, 2);
-  var table = $("#patterns");
-  var i = patterns.length - 1;
-  var tr = addPatternRow(table, i);
-  openInputs(tr);
+function createPattern() {
+  var pat = newPattern(180, 10, 120, 2);
+  openInputs(pat, null);
 }
 
 function initTable() {
@@ -360,16 +380,16 @@ function getParameterByName(name, defaultValue) {
 
 function init() {
 
-      var saved = localStorage.getItem("cm_status");
+  var saved = localStorage.getItem("cm_status");
   var status;
-      if (saved) try {
+  if (saved) try {
     status = saved && JSON && JSON.parse ? JSON.parse(saved) : undefined;
-        patterns = status.patterns;
-        gainValue = status.gainValue ? status.gainValue : 1;
-        mark4th = status.mark4th ? status.mark4th : false;
-      } catch (ex) {
-        console.error("Invalid status in storage");
-      }
+    patterns = status.patterns;
+    gainValue = status.gainValue ? status.gainValue : 1;
+    mark4th = status.mark4th ? status.mark4th : false;
+  } catch (ex) {
+    console.error("Invalid status in storage");
+  }
 
   // init patterns
   var toimport = getParameterByName("import");
@@ -379,112 +399,112 @@ function init() {
     window.history.pushState({}, document.title, window.location.pathname);
   } else if (saved) {
     patterns = status.patterns;
+  }
+
+  // warning: safari assigns patterns with #patterns DOM element
+  if (!Array.isArray(patterns)) {
+    // default value
+    patterns = [];
+    addNewPattern(170, 30, 10, 3);
+    addNewPattern(60, 15, 10, 2);
+    addNewPattern(180, 30, 10, 5);
+  }
+  saveStatus();
+  initTable();
+
+  $("#play").click(letsGo);
+  $("#stop").click(thisIsTheEnd);
+  $("#clear").click(clearAllPatterns);
+  $("#share").click(openExport);
+
+  $("#settings").click(openSettings);
+  $("#setting-gain").change(changeVolume);
+  $("#setting-mark4th").change(changeMark4th);
+  $("#settings-close").click(closeSettings);
+
+  $("#add").click(createPattern);
+  $("#input-ok").click(validateInputs);
+  $("#input-cancel").click(closeInputsBox);
+  $("#input-clear").click(clearInputs);
+  $("#export-close").click(closeExport);
+  $(".copyonclick").click(copyOnClick);
+
+  $("#email").click(function() {
+    function doEmail(d, i, tail) {
+      location.href = "mailto:" + i + "@" + d + tail;
     }
+    doEmail("gmail.com", "olivier.potonniee", "?subject=" + "cadence-me");
+    return false;
+  });
 
-    // warning: safari assigns patterns with #patterns DOM element
-    if (!Array.isArray(patterns)) {
-      // default value
-      patterns = [];
-      addPattern(170, 30, 10, 3);
-      addPattern(60, 15, 10, 2);
-      addPattern(180, 30, 10, 5);
-    }
-    saveStatus();
-    initTable();
 
-    $("#play").click(letsGo);
-    $("#stop").click(thisIsTheEnd);
-    $("#clear").click(clearAllPatterns);
-    $("#share").click(openExport);
-
-    $("#settings").click(openSettings);
-    $("#setting-gain").change(changeVolume);
-    $("#setting-mark4th").change(changeMark4th);
-    $("#settings-close").click(closeSettings);
-
-    $("#add").click(newPattern);
-    $("#input-ok").click(validateInputs);
-    $("#input-cancel").click(closeInputsBox);
-    $("#input-clear").click(clearInputs);
-    $("#export-close").click(closeExport);
-    $(".copyonclick").click(copyOnClick);
-
-    $("#email").click(function() {
-      function doEmail(d, i, tail) {
-        location.href = "mailto:" + i + "@" + d + tail;
+  function onKeyEvent(event) {
+    if (event.which == 27) {
+      if (cancelFunc) {
+        cancelFunc();
+        cancelFunc = undefined;
       }
-      doEmail("gmail.com", "olivier.potonniee", "?subject=" + "cadence-me");
-      return false;
-    });
-
-
-    function onKeyEvent(event) {
-      if (event.which == 27) {
-        if (cancelFunc) {
-          cancelFunc();
-          cancelFunc = undefined;
-        }
-      } else if (event.keyCode == 13) {
-        if (okFunc) {
-          okFunc();
-          okFunc = undefined;
-        }
+    } else if (event.keyCode == 13) {
+      if (okFunc) {
+        okFunc();
+        okFunc = undefined;
       }
     }
+  }
 
-    $("body").keyup(onKeyEvent);
+  $("body").keyup(onKeyEvent);
 
-    // sortable
-    $("#patterns").sortable({
-      //scroll: true,
-      nodes: ".pattern",
-      handle: ".drag-handle, .vtempo, .vlen, .vpause, .vrepeat",
-      update: function() {
-        var newpatterns = [];
-        $("#patterns div.pattern").each(function(i, elt){
-          var id = parseInt($(elt).attr("patid"));
-          newpatterns.push(patterns[id]);
-          $(elt).attr("patid", i);
-        });
-        patterns = newpatterns;
-        saveStatus();
-      }
-    });
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js')
-      .then(function(registration) {
-        // Registration was successful
-        console.log('[SW registration success] scope: ', registration.scope);
-      }, function(err) {
-        // registration failed :(
-        console.log('[SW registration fail]: ', err);
+  // sortable
+  $("#patterns").sortable({
+    //scroll: true,
+    nodes: ".pattern",
+    handle: ".drag-handle, .vtempo, .vlen, .vpause, .vrepeat",
+    update: function() {
+      var newpatterns = [];
+      $("#patterns div.pattern").each(function(i, elt){
+        var id = parseInt($(elt).attr("patid"));
+        newpatterns.push(patterns[id]);
+        $(elt).attr("patid", i);
       });
+      patterns = newpatterns;
+      saveStatus();
     }
+  });
 
-    // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
-    // Http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js
-    // TO WORK ON CURRENT CHROME!!  But this means our code can be properly
-    // spec-compliant, and work on Chrome, Safari and Firefox.
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+    .then(function(registration) {
+      // Registration was successful
+      console.log('[SW registration success] scope: ', registration.scope);
+    }, function(err) {
+      // registration failed :(
+      console.log('[SW registration fail]: ', err);
+    });
+  }
 
-    audioContext = new AudioContext();
-    gainNode = audioContext.createGain();
-    setGainValue(gainValue);
-    gainNode.connect(audioContext.destination);
+  // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
+  // Http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js
+  // TO WORK ON CURRENT CHROME!!  But this means our code can be properly
+  // spec-compliant, and work on Chrome, Safari and Firefox.
 
-    // if we wanted to load audio files, etc., this is where we should do it.
+  audioContext = new AudioContext();
+  gainNode = audioContext.createGain();
+  setGainValue(gainValue);
+  gainNode.connect(audioContext.destination);
 
-    timerWorker = new Worker("js/metronomeworker.js");
+  // if we wanted to load audio files, etc., this is where we should do it.
 
-    timerWorker.onmessage = function(e) {
-        if (e.data == "tick") {
-            // console.log("tick!");
-            scheduler();
-        }
-        else
-            console.log("message: " + e.data);
-    };
-    timerWorker.postMessage({"interval":lookahead});
+  timerWorker = new Worker("js/metronomeworker.js");
+
+  timerWorker.onmessage = function(e) {
+      if (e.data == "tick") {
+          // console.log("tick!");
+          scheduler();
+      }
+      else
+          console.log("message: " + e.data);
+  };
+  timerWorker.postMessage({"interval":lookahead});
 }
 
 window.addEventListener("load", init );
