@@ -360,22 +360,25 @@ function getParameterByName(name, defaultValue) {
 
 function init() {
 
-    // init patterns
-    var toimport = getParameterByName("import");
-    if (toimport && JSON && JSON.parse && supportsBase64()) {
-      var jsparsed = JSON.parse(b64DecodeUnicode(toimport));
-      patterns = jsparsed.patterns;
-      window.history.pushState({}, document.title, window.location.pathname);
-    } else {
       var saved = localStorage.getItem("cm_status");
+  var status;
       if (saved) try {
-        var status = saved && JSON && JSON.parse ? JSON.parse(saved) : undefined;
+    status = saved && JSON && JSON.parse ? JSON.parse(saved) : undefined;
         patterns = status.patterns;
         gainValue = status.gainValue ? status.gainValue : 1;
         mark4th = status.mark4th ? status.mark4th : false;
       } catch (ex) {
         console.error("Invalid status in storage");
       }
+
+  // init patterns
+  var toimport = getParameterByName("import");
+  if (toimport && JSON && JSON.parse && supportsBase64()) {
+    var jsparsed = JSON.parse(b64DecodeUnicode(toimport));
+    patterns = jsparsed.patterns;
+    window.history.pushState({}, document.title, window.location.pathname);
+  } else if (saved) {
+    patterns = status.patterns;
     }
 
     // warning: safari assigns patterns with #patterns DOM element
