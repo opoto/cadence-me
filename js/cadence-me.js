@@ -262,7 +262,7 @@ function closeSettings() {
 }
 function openSettings() {
   $("#setting-gain").val(gainValue);
-  $("#setting-mark4th").val(mark4th);
+  $("#setting-mark4th").attr("checked", mark4th);
   $("#settings-box").css("display", "block");
   okFunc = closeSettings;
   cancelFunc = closeSettings;
