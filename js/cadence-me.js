@@ -24,25 +24,25 @@ var FREQ_BIP16 = 220.0;     // low tone
 var patterns;
 
 function nextNote() {
-    // Advance current note and time by a 16th note...
-    var secondsPerBeat = 60.0 / tempo;    // Notice this picks up the CURRENT
-                                          // tempo value to calculate beat length.
-    nextNoteTime += 0.25 * secondsPerBeat;    // Add beat length to last beat time
+  // Advance current note and time by a 16th note...
+  // Notice this picks up the CURRENT tempo value to calculate beat length.
+  var secondsPerBeat = 60.0 / tempo;
+  nextNoteTime += 0.25 * secondsPerBeat; // Add beat length to last beat time
 
-    current16thNote++;    // Advance the beat number, wrap to zero
-    if (current16thNote == 16) {
-        current16thNote = 0;
-    }
+  current16thNote++; // Advance the beat number, wrap to zero
+  if (current16thNote == 16) {
+    current16thNote = 0;
+  }
 }
 
-function scheduleNote( beatNumber, time ) {
+function scheduleNote(beatNumber, time) {
   // push the note on the queue, even if we're not playing.
-  notesInQueue.push( { note: beatNumber, time: time } );
+  notesInQueue.push({ note: beatNumber, time: time });
 
-  if ( (noteResolution==1) && (beatNumber%2)) {
+  if ((noteResolution == 1) && (beatNumber % 2)) {
     return; // we're not playing non-8th 16th notes
   }
-  if ( (noteResolution==2) && (beatNumber%4)) {
+  if ((noteResolution == 2) && (beatNumber % 4)) {
     return; // we're not playing non-quarter 8th notes
   }
 
@@ -52,80 +52,80 @@ function scheduleNote( beatNumber, time ) {
   osc.connect(gainNode);
   if (beatNumber % 16 === 0) {          // beat 0 == high pitch
     osc.frequency.value = FREQ_BIP1;
-  } else if (beatNumber % 4 === 0 ) {   // quarter notes = medium pitch
+  } else if (beatNumber % 4 === 0) {   // quarter notes = medium pitch
     osc.frequency.value = mark4th ? FREQ_BIP4 : FREQ_BIP1;
   } else {                              // other 16th notes = low pitch
     osc.frequency.value = FREQ_BIP16;
   }
 
 
-  osc.start( time );
-  osc.stop( time + noteLength );
+  osc.start(time);
+  osc.stop(time + noteLength);
 }
 
 function scheduler() {
   // while there are notes that will need to play before the next interval,
   // schedule them and advance the pointer.
-  while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
-    scheduleNote( current16thNote, nextNoteTime );
+  while (nextNoteTime < audioContext.currentTime + scheduleAheadTime) {
+    scheduleNote(current16thNote, nextNoteTime);
     nextNote();
   }
 }
 
 var patnum,
-    patrepeat,
-    pattimer;
+  patrepeat,
+  pattimer;
 
 function next() {
 
-    if (!unlocked) {
-      // play silent buffer to unlock the audio
-      var buffer = audioContext.createBuffer(1, 1, 22050);
-      var node = audioContext.createBufferSource();
-      node.buffer = buffer;
-      node.start(0);
-      unlocked = true;
-    }
+  if (!unlocked) {
+    // play silent buffer to unlock the audio
+    var buffer = audioContext.createBuffer(1, 1, 22050);
+    var node = audioContext.createBufferSource();
+    node.buffer = buffer;
+    node.start(0);
+    unlocked = true;
+  }
 
-    isPlaying = !isPlaying;
-    if (!isPlaying) {
-      // silence: stop playing
-      timerWorker.postMessage("stop");
-      pattimer = setTimeout(next, patterns[patnum].pause * 1000);
-      if (patterns[patnum].repeat > patrepeat) {
-        console.log("repeat");
-        patrepeat++;
-      } else {
-        console.log("next pat");
-        patnum++;
-        if (patnum < patterns.length) {
-          patrepeat = 1;
-        } else {
-          // last one, skip pause
-          thisIsTheEnd();
-        }
-      }
+  isPlaying = !isPlaying;
+  if (!isPlaying) {
+    // silence: stop playing
+    timerWorker.postMessage("stop");
+    pattimer = setTimeout(next, patterns[patnum].pause * 1000);
+    if (patterns[patnum].repeat > patrepeat) {
+      console.log("repeat");
+      patrepeat++;
     } else {
+      console.log("next pat");
+      patnum++;
       if (patnum < patterns.length) {
-        // let's rock
-        tempo = patterns[patnum].tempo;
-        current16thNote = 0;
-        nextNoteTime = audioContext.currentTime;
-        timerWorker.postMessage("start");
-        pattimer = setTimeout(next, patterns[patnum].len * 1000);
+        patrepeat = 1;
       } else {
+        // last one, skip pause
         thisIsTheEnd();
       }
+    }
+  } else {
+    if (patnum < patterns.length) {
+      // let's rock
+      tempo = patterns[patnum].tempo;
+      current16thNote = 0;
+      nextNoteTime = audioContext.currentTime;
+      timerWorker.postMessage("start");
+      pattimer = setTimeout(next, patterns[patnum].len * 1000);
+    } else {
+      thisIsTheEnd();
+    }
   }
 }
 
 function thisIsTheEnd() {
-    timerWorker.postMessage("stop");
-    if (pattimer) clearTimeout(pattimer);
-    pattimer = undefined;
-    $("#stop").hide();
-    $("#play").show();
-    console.log("done.");
+  timerWorker.postMessage("stop");
+  if (pattimer) clearTimeout(pattimer);
+  pattimer = undefined;
+  $("#stop").hide();
+  $("#play").show();
+  console.log("done.");
 }
 
 // create pattern object
@@ -158,19 +158,19 @@ function saveStatus() {
 }
 
 function letsGo() {
-    // play
-    if (patterns.length > 0) {
-      patnum = 0;
-      patrepeat = 1;
-      isPlaying = false;
-      next();
-      $("#stop").show();
-      $("#play").hide();
-    }
+  // play
+  if (patterns.length > 0) {
+    patnum = 0;
+    patrepeat = 1;
+    isPlaying = false;
+    next();
+    $("#stop").show();
+    $("#play").hide();
+  }
 }
 
 function clearInputs() {
-    $("table.tinputs input").val("");
+  $("table.tinputs input").val("");
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -185,10 +185,10 @@ var cancelFunc;
 function openInputs(pat, tr) {
   inputPat = tr;
   $("#input-tempo").val(pat.tempo);
-  $("#input-lenmin").val(Math.floor(pat.len/60));
-  $("#input-lensec").val((pat.len%60));
-  $("#input-pausemin").val(Math.floor(pat.pause/60));
-  $("#input-pausesec").val((pat.pause%60));
+  $("#input-lenmin").val(Math.floor(pat.len / 60));
+  $("#input-lensec").val((pat.len % 60));
+  $("#input-pausemin").val(Math.floor(pat.pause / 60));
+  $("#input-pausesec").val((pat.pause % 60));
   $("#input-repeat").val(pat.repeat);
   $("#input-box").css("display", "block");
   $("#input-tempo").select();
@@ -275,10 +275,10 @@ function copyOnClick(event) {
     document.execCommand("copy");
     var tmp = elt.val();
     elt.val("Text copied to clipboard");
-    setTimeout(function(){
+    setTimeout(function () {
       elt.val(tmp);
       elt.select();
-     }, 2000);
+    }, 2000);
   }
 }
 
@@ -301,7 +301,7 @@ function deletePattern(pat) {
     var i = parseInt(pat.attr("patid"));
     patterns.splice(i, 1);
     pat.remove();
-    $("#patterns .pattern").each(function(i, elt) {
+    $("#patterns .pattern").each(function (i, elt) {
       $(elt).attr("patid", i);
     });
     saveStatus();
@@ -327,8 +327,8 @@ function addPatternRow(patternsDiv, i) {
 
 function setPatternRow(tr, tempo, len, pause, repeat) {
   tr.find(".vtempo").text(tempo);
-  tr.find(".vlen").text(Math.floor(len / 60) + "'" + (len%60) + "\"");
-  tr.find(".vpause").text(Math.floor(pause / 60) + "'" + (pause%60) + "\"");
+  tr.find(".vlen").text(Math.floor(len / 60) + "'" + (len % 60) + "\"");
+  tr.find(".vpause").text(Math.floor(pause / 60) + "'" + (pause % 60) + "\"");
   tr.find(".vrepeat").text(repeat);
 }
 
@@ -340,7 +340,7 @@ function createPattern() {
 function initTable() {
   clearTable();
   var table = $("#patterns");
-  for (var i=0; i < patterns.length; i++) {
+  for (var i = 0; i < patterns.length; i++) {
     var tr = addPatternRow(table, i);
     setPatternRow(tr, patterns[i].tempo, patterns[i].len, patterns[i].pause, patterns[i].repeat);
   }
@@ -349,24 +349,24 @@ function initTable() {
 // --------------------------- Utility methods --------------------------------
 
 function intInput(elt) {
-    try {
-      var v = parseInt(elt.val().trim(), 10);
-      return v || 0;
-    } catch(err) {
-      return 0;
-    }
+  try {
+    var v = parseInt(elt.val().trim(), 10);
+    return v || 0;
+  } catch (err) {
+    return 0;
+  }
 }
 
 function supportsBase64() {
   return btoa && atob ? true : false;
 }
 function b64EncodeUnicode(str) {
-  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
     return String.fromCharCode('0x' + p1);
   }));
 }
 function b64DecodeUnicode(str) {
-  return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+  return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
   }).join(''));
 }
@@ -429,7 +429,7 @@ function init() {
   $("#export-close").click(closeExport);
   $(".copyonclick").click(copyOnClick);
 
-  $("#email").click(function() {
+  $("#email").click(function () {
     function doEmail(d, i, tail) {
       location.href = "mailto:" + i + "@" + d + tail;
     }
@@ -459,9 +459,9 @@ function init() {
     //scroll: true,
     nodes: ".pattern",
     handle: ".drag-handle, .vtempo, .vlen, .vpause, .vrepeat",
-    update: function() {
+    update: function () {
       var newpatterns = [];
-      $("#patterns div.pattern").each(function(i, elt){
+      $("#patterns div.pattern").each(function (i, elt) {
         var id = parseInt($(elt).attr("patid"));
         newpatterns.push(patterns[id]);
         $(elt).attr("patid", i);
@@ -473,13 +473,13 @@ function init() {
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
-    .then(function(registration) {
-      // Registration was successful
-      console.log('[SW registration success] scope: ', registration.scope);
-    }, function(err) {
-      // registration failed :(
-      console.log('[SW registration fail]: ', err);
-    });
+      .then(function (registration) {
+        // Registration was successful
+        console.log('[SW registration success] scope: ', registration.scope);
+      }, function (err) {
+        // registration failed :(
+        console.log('[SW registration fail]: ', err);
+      });
   }
 
   // NOTE: THIS RELIES ON THE MONKEYPATCH LIBRARY BEING LOADED FROM
@@ -496,15 +496,15 @@ function init() {
 
   timerWorker = new Worker("js/metronomeworker.js");
 
-  timerWorker.onmessage = function(e) {
-      if (e.data == "tick") {
-          // console.log("tick!");
-          scheduler();
-      }
-      else
-          console.log("message: " + e.data);
+  timerWorker.onmessage = function (e) {
+    if (e.data == "tick") {
+      // console.log("tick!");
+      scheduler();
+    }
+    else
+      console.log("message: " + e.data);
   };
-  timerWorker.postMessage({"interval":lookahead});
+  timerWorker.postMessage({ "interval": lookahead });
 }
 
-window.addEventListener("load", init );
+window.addEventListener("load", init);
