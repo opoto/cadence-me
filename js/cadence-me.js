@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 var audioContext = null;
 var gainNode;
 var gainValue;
@@ -22,6 +21,17 @@ var FREQ_BIP1  = 880.0;     // high tone
 var FREQ_BIP4  = 440.0;     // medium tone
 var FREQ_BIP16 = 220.0;     // low tone
 var patterns;
+
+function log(msg, to) {
+  if (!to) {
+    to = "log";
+  }
+  // eslint-disable-next-line no-console
+  if (console && console[to]) {
+    // eslint-disable-next-line no-console
+    console[to](msg);
+  }
+}
 
 function nextNote() {
   // Advance current note and time by a 16th note...
@@ -93,10 +103,10 @@ function next() {
     timerWorker.postMessage("stop");
     pattimer = setTimeout(next, patterns[patnum].pause * 1000);
     if (patterns[patnum].repeat > patrepeat) {
-      console.log("repeat");
+      log("repeat");
       patrepeat++;
     } else {
-      console.log("next pat");
+      log("next pat");
       patnum++;
       if (patnum < patterns.length) {
         patrepeat = 1;
@@ -125,7 +135,7 @@ function thisIsTheEnd() {
   pattimer = undefined;
   $("#stop").hide();
   $("#play").show();
-  console.log("done.");
+  log("done.");
 }
 
 // create pattern object
@@ -388,7 +398,7 @@ function init() {
     gainValue = status.gainValue ? status.gainValue : 1;
     mark4th = status.mark4th ? status.mark4th : false;
   } catch (ex) {
-    console.error("Invalid status in storage");
+    log("Invalid status in storage", "error");
   }
 
   // init patterns
@@ -475,10 +485,10 @@ function init() {
     navigator.serviceWorker.register('./sw.js')
       .then(function (registration) {
         // Registration was successful
-        console.log('[SW registration success] scope: ', registration.scope);
+        log('[SW registration success] scope: ', registration.scope);
       }, function (err) {
         // registration failed :(
-        console.log('[SW registration fail]: ', err);
+        log('[SW registration fail]: ', err);
       });
   }
 
@@ -495,16 +505,17 @@ function init() {
   // if we wanted to load audio files, etc., this is where we should do it.
 
   timerWorker = new Worker("js/metronomeworker.js");
-
-  timerWorker.onmessage = function (e) {
+  timerWorker.onmessage = function(e) {
     if (e.data == "tick") {
-      // console.log("tick!");
+      // log("tick!");
       scheduler();
+    } else {
+      log("message: " + e.data);
     }
-    else
-      console.log("message: " + e.data);
   };
-  timerWorker.postMessage({ "interval": lookahead });
+  timerWorker.postMessage({
+    "interval": lookahead
+  });
 }
 
 window.addEventListener("load", init);
