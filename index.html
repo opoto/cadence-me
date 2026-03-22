@@ -10,7 +10,7 @@
       style-src 'self' 'unsafe-inline' https://use.fontawesome.com https://www.jqueryscript.net;
       script-src 'self' 'unsafe-inline' https://use.fontawesome.com https://cwilso.github.io https://www.jqueryscript.net https://code.jquery.com https://gc.zgo.at https://storage.googleapis.com;
       font-src https://use.fontawesome.com;
-      connect-src * https://cadence-me.goatcounter.com;
+      connect-src https://cadence-me.goatcounter.com;
       img-src * data:;
       worker-src 'self';
       object-src 'none'">
@@ -25,11 +25,19 @@
 
     <!-- privacy-friendly usage stats -->
     <script>
-      // Only load on production environment.
-      if (window.location.host !== 'opoto.github.io')
-          window.goatcounter = {no_onload: true}
+      // Only load on production environment, and manually opted-out
+      if ((window.location.host !== 'opoto.github.io') ||
+        (localStorage.getItem("goatcounter." + location.host) === "false") ||
+        (localStorage.getItem("goatcounter.ALL") === "false")) {
+        window.goatcounter = {
+          no_onload: true
+        };
+      }
+      window.goatcounter = {
+        path: function(p) { return location.host + p } // add domain name
+      }
     </script>
-    <script data-goatcounter="https://cadence-me.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script data-goatcounter="https://cadence-me.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 
   </head>
   <body>
