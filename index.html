@@ -8,7 +8,7 @@
 
     <meta http-equiv="Content-Security-Policy" content="default-src 'self';
       style-src 'self' 'unsafe-inline' https://use.fontawesome.com https://www.jqueryscript.net https://cdnjs.cloudflare.com;
-      script-src 'self' 'unsafe-inline' https://use.fontawesome.com https://cdnjs.cloudflare.com https://cwilso.github.io https://www.jqueryscript.net https://code.jquery.com https://www.googletagmanager.com https://www.google-analytics.com;
+      script-src 'self' 'unsafe-inline' https://use.fontawesome.com https://cdnjs.cloudflare.com https://cwilso.github.io https://www.jqueryscript.net https://code.jquery.com https://cadence-me.goatcounter.com;
       font-src https://use.fontawesome.com;
       connect-src *;
       img-src * data:;
@@ -22,30 +22,16 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/fontawesome.css" integrity="sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
     <link href='https://www.jqueryscript.net/demo/Mobile-Drag-Drop-Plugin-jQuery/draganddrop.css' rel='stylesheet' type='text/css'>
-    <!-- -->
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+
+    <!-- privacy-friendly usage stats -->
     <script>
-    window.addEventListener("load", function(){
-    window.cookieconsent.initialise({
-      "palette": {
-        "popup": {
-          "background": "#000"
-        },
-        "button": {
-          "background": "#f1d600"
-        }
-      },
-      "content": {
-        "message": "This web site uses cookies and your browser local storage to bring you an optimized experience.",
-        "dismiss": "Got it",
-        "link": "Read our privacy policy",
-        "href": "https://github.com/opoto/cadence-me/wiki/Privacy-Policy"
-      }
-    })});
+      // Only load on production environment.
+      if (window.location.host !== 'opoto.github.io')
+          window.goatcounter = {no_onload: true}
     </script>
-    <!-- -->
-    </head>
+    <script data-goatcounter="https://cadence-me.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  </head>
   <body>
     <h1>Cadence Me!</h1>
 
@@ -116,11 +102,11 @@
     <div id="settings-box" class="modal">
       <div class="modal-content">
         <table class="tsettings">
-          <tr>    
+          <tr>
             <td>Volume:</td>
             <td><input id="setting-gain" type="range" min="0" max="100"/></td>
           </tr>
-          <tr>    
+          <tr>
             <td>Mark 4th:</td>
             <td><input id="setting-mark4th" type="checkbox"/></td>
           </tr>
@@ -130,7 +116,7 @@
         </table>
       </div>
     </div>
-  
+
     <div id="btns">
       <span id="playstop">
         <a id="play" class="btn" title="Start workout">
@@ -195,16 +181,6 @@
         <dd>Just to play the blues ;)</dd>
       </dl>
     </div>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130678291-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-130678291-1');
-    </script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
